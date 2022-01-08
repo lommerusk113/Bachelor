@@ -1,9 +1,22 @@
 import React, {useState} from 'react'
 import {  StyleSheet,Text, Button, View, Modal} from 'react-native';
 import Login from './Login';
+//import Firebase from '../config/firebase';
+//import { AuthenticatedUserContext } from '../navigation/AuthenticatedUserProvider';
+
 
 function Mainscreen() {
-const [openLogin, setOpenLogin] = useState(false);
+    const [openLogin, setOpenLogin] = useState(false);
+    // const auth = Firebase.auth();
+
+    //const { user } = useContext(AuthenticatedUserContext);
+    //const handleSignOut = async () => {
+    //    try {
+    //    await auth.signOut();
+    //    } catch (error) {
+    //    console.log(error);
+    //    }
+    //};
     return (
         <View>
             <Modal
@@ -20,7 +33,7 @@ const [openLogin, setOpenLogin] = useState(false);
                 <Login />
             </Modal>
             <Text>
-                Fredrik er Dårlig i dataspill
+                Hei, {/* user.email */}
             </Text>
             <Button
                 onPress={() => setOpenLogin(true)}
