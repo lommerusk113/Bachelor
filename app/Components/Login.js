@@ -1,13 +1,14 @@
 import React, {useState} from 'react'
 import {  StyleSheet,Text, Button, View, Modal, Alert, TextInput, SafeAreaView} from 'react-native';
 import { auth } from '../config/firebase';
-//import Signup from './Signup';
 
 const Login = () => {
-    const [email, setEmail] = useState()
-    const [password, setPassword] = useState()
+    const [email, setEmail] = useState();
+    const [password, setPassword] = useState();
     const [openLogin, setOpenLogin] = useState(false);
-    const [userEmail, setUserEmail] = useState()
+    const [userEmail, setUserEmail] = useState();
+    const [glemtPassord, setGlemtPassord] = useState(false);
+    const [glemtEpost, setGlemtEpost] = useState();
 
     // Opens Login if the user is not logged in
     auth.onAuthStateChanged((user) => {
@@ -55,6 +56,18 @@ const Login = () => {
           });
     }
 
+    //Glemt Passord
+    const handleGlemt = () => {
+        try{
+            auth
+            .sendPasswordResetEmail(glemtEpost)
+            .then(Alert.alert('','E-post for resetting av ditt passord er sendt', [{text: "Ok", onPress: () => {setGlemtPassord(false)}}]))
+        }catch(error){
+            console.log(error)
+        }
+    }
+
+
 
 
     return (
@@ -66,6 +79,15 @@ const Login = () => {
                 <TextInput onChangeText={(password) => {setPassword(password)}} />
                 <Button onPress={onLogin} title="Logg inn!" color= "#00ffff"/>
                 <Button onPress= {onHandleSignup} title="Signup!" />
+                <Button title="Glemt Passord?" color= "#00ffff" onPress={() => setGlemtPassord(true)}/>
+                {/* Om brukeren har glemt sitt passord */}
+                <Modal style={styles.modal} animationType="slide" visible={glemtPassord} >
+                    <SafeAreaView>
+                        <Text>E-postadresse</Text>
+                        <TextInput onChangeText={(glemt) => {setGlemtEpost(glemt)}}/>
+                        <Button onPress={handleGlemt} title="Bekreft!" color= "#00ffff"/>
+                    </SafeAreaView>
+                </Modal>
             </Modal>
             <Text>Hei {userEmail}</Text>
             {/* <Button onPress={() => setOpenLogin(true)} title="Logg inn!" color="#841584" />  */}
