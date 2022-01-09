@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {  StyleSheet,Text, Button, View, Modal, Alert, TextInput, SafeAreaView} from 'react-native';
+import {  StyleSheet,Text, Button, View, Modal, Alert, TextInput, SafeAreaView, TouchableOpacity, Touchable} from 'react-native';
 import { auth } from '../config/firebase';
 
 const Login = () => {
@@ -24,6 +24,7 @@ const Login = () => {
           if (email !== '' && password !== '') {
            await auth.signInWithEmailAndPassword(email, password);
            setOpenLogin(false)
+           console.log("Logged in")
           }
         } catch (error) {
           console.log(error)
@@ -51,6 +52,7 @@ const Login = () => {
     const handleLogout = () => {
         auth.signOut().then(function() {
             // Sign-out successful.
+            console.log("Logged out!")
           }, function(error) {
             // An error happened.
           });
@@ -71,32 +73,106 @@ const Login = () => {
 
 
     return (
-        <SafeAreaView>
-             <Modal style={styles.modal} animationType="slide" visible={openLogin} >
-                <Text>E-post</Text>
-                <TextInput onChangeText={(username) => {setEmail(username)}} />
-                <Text>Passord</Text>
-                <TextInput onChangeText={(password) => {setPassword(password)}} />
-                <Button onPress={onLogin} title="Logg inn!" color= "#00ffff"/>
-                <Button onPress= {onHandleSignup} title="Signup!" />
-                <Button title="Glemt Passord?" color= "#00ffff" onPress={() => setGlemtPassord(true)}/>
-                {/* Om brukeren har glemt sitt passord */}
-                <Modal style={styles.modal} animationType="slide" visible={glemtPassord} >
-                    <SafeAreaView>
-                        <Text>E-postadresse</Text>
-                        <TextInput onChangeText={(glemt) => {setGlemtEpost(glemt)}}/>
-                        <Button onPress={handleGlemt} title="Bekreft!" color= "#00ffff"/>
-                    </SafeAreaView>
-                </Modal>
+        <SafeAreaView style={styles.container}>
+             <Modal  animationType="slide" visible={openLogin} >
+                 <View style={styles.container}>
+                    <View style={styles.inputContainer}>
+                        <Text>E-post</Text>
+                        <TextInput onChangeText={(username) => {setEmail(username)}} style={styles.input}/>
+                        <Text>Passord</Text>
+                        <TextInput onChangeText={(password) => {setPassword(password)}} style={styles.input} />
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity onPress={onLogin} style={[styles.button, styles.buttonOutline]}>
+                            <Text style={styles.buttonOutlineText}>Logg Inn!</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress= {onHandleSignup} style={[styles.button, styles.buttonOutline]}>
+                            <Text style={styles.buttonOutlineText}>Registrer!</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => setGlemtPassord(true)} style={[styles.button, styles.buttonOutline]}>
+                            <Text style={styles.buttonOutlineText}>Glemt Passord?</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {/* Om brukeren har glemt sitt passord */}
+                    <Modal animationType="slide" visible={glemtPassord} >
+                        <TouchableOpacity style= {styles.backButton} onPress={() => setGlemtPassord(false)}>
+                            <Text style={styles.buttonOutlineText}>Tilbake</Text>
+                        </TouchableOpacity>
+                        <SafeAreaView style={styles.container}>
+                            <Text>E-postadresse</Text>
+                            <TextInput onChangeText={(glemt) => {setGlemtEpost(glemt)}}/>
+                            <TouchableOpacity onPress={handleGlemt} style={[styles.button, styles.buttonOutline]}>
+                                <Text style={styles.buttonOutlineText}>Bekreft!</Text>
+                            </TouchableOpacity>
+                        </SafeAreaView>
+                    </Modal>
+                </View>
             </Modal>
             <Text>Hei {userEmail}</Text>
             {/* <Button onPress={() => setOpenLogin(true)} title="Logg inn!" color="#841584" />  */}
-            <Button onPress={handleLogout} title="Logg ut!" />
+            <TouchableOpacity onPress={(handleLogout)} style={[styles.button, styles.buttonOutline]}>
+                <Text style={styles.buttonOutlineText}>Logg ut!</Text>
+            </TouchableOpacity>
         </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      inputContainer: {
+        width: '80%'
+      },
+      input: {
+        backgroundColor: 'grey',
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        borderRadius: 10,
+        marginTop: 5,
+      },
+      buttonContainer: {
+        width: '60%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 40,
+      },
+      button: {
+        backgroundColor: '#0782F9',
+        width: '70%',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+      },
+      buttonOutline: {
+        backgroundColor: 'white',
+        marginTop: 5,
+        borderColor: '#0782F9',
+        borderWidth: 2,
+      },
+      buttonText: {
+        color: 'white',
+        fontWeight: '700',
+        fontSize: 16,
+      },
+      buttonOutlineText: {
+        color: '#0782F9',
+        fontWeight: '700',
+        fontSize: 16,
+      },
+      backButton: {
+        marginTop: 15,
+        borderWidth: 2,
+        borderColor: "grey",
+        borderRadius: 30,
+        width: "20%",
+        alignItems: "center",
+        justifyContent: "center",
+        marginLeft: 5,
+
+      },
 })
 
 export default Login
