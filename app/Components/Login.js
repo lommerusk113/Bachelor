@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {  StyleSheet,Text, Button, View, Modal, Alert, TextInput, SafeAreaView} from 'react-native';
 import { auth } from '../config/firebase';
-import Signup from './Signup';
+//import Signup from './Signup';
 
 const Login = () => {
     const [email, setEmail] = useState()
@@ -29,6 +29,23 @@ const Login = () => {
        }
      };
 
+    //Lets the user sign-up
+    const onHandleSignup = () => {
+        try{
+            if (email !== '' && password !== '') {
+                auth
+                    .createUserWithEmailAndPassword(email, password)
+                    .then(userCredentials => {
+                        const user = userCredentials.user;
+                        console.log(user.email)
+                        onLogin()
+                    })
+            }
+        }catch(error){
+            console.log(error)
+        }
+    }
+
     // Log out user on click
     const handleLogout = () => {
         auth.signOut().then(function() {
@@ -38,6 +55,8 @@ const Login = () => {
           });
     }
 
+
+
     return (
         <SafeAreaView>
              <Modal style={styles.modal} animationType="slide" visible={openLogin} >
@@ -46,7 +65,7 @@ const Login = () => {
                 <Text>Passord</Text>
                 <TextInput onChangeText={(password) => {setPassword(password)}} />
                 <Button onPress={onLogin} title="Logg inn!" color= "#00ffff"/>
-                <Signup />
+                <Button onPress= {onHandleSignup} title="Signup!" />
             </Modal>
             <Text>Hei {userEmail}</Text>
             {/* <Button onPress={() => setOpenLogin(true)} title="Logg inn!" color="#841584" />  */}
