@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@firebase/auth-compat": "^0.2.5",
+    "@react-native-async-storage/async-storage": "^1.15.14",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/stack": "^6.0.11",

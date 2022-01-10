@@ -3,49 +3,130 @@ import {  StyleSheet,Text, Button, View, Modal, Alert, TextInput, SafeAreaView, 
 import { auth } from '../config/firebase';
 
 const Login = () => {
+    //LOGIN INPUT
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
-    const [openLogin, setOpenLogin] = useState(false);
-    const [userEmail, setUserEmail] = useState();
+
+    //SIGNUP INPUT
+    const [bekreftSignupPassword, setBekreftSignupPassword] = useState();
+
+    //MODAL OPEN / CLOSE
     const [glemtPassord, setGlemtPassord] = useState(false);
-    const [glemtEpost, setGlemtEpost] = useState();
+    const [openLogin, setOpenLogin] = useState(false);
     const [signup, setSignup] = useState(false);
+
+    //E-POST TIL INLOGGET BRUKER
+    const [userEmail, setUserEmail] = useState();
+
+    //E-POST FOR GLEMT BRUKER
+    const [glemtEpost, setGlemtEpost] = useState();
+
 
     // Opens Login if the user is not logged in
     auth.onAuthStateChanged((user) => {
         if (user) {
             setUserEmail(user.email);
+
+            //REMOVE EMAIL AND PASSWORD ON LOGIN
+            setEmail("");
+            setPassword("");
+            setBekreftSignupPassword("");
         }else{
             setOpenLogin(true);
         }
     })
+
     // Checks if the user has typed in a valid username and password
     const onLogin = async () => {
+        console.log("Attempting login!")
         try {
           if (email !== '' && password !== '') {
            await auth.signInWithEmailAndPassword(email, password);
            setOpenLogin(false);
            console.log("Logged in");
+
+           //TØM FELTENE NÅR BRUKEREN LOGGER INN
+           setEmail("");
+           setPassword("");
+          }else{
+            Alert.alert('','Vennligst fyll inn feltene for E-post og Passord',)
           }
         } catch (error) {
-          console.log(error);
-       }
+
+            // FEIL PASSORD
+            if (error.message == "The password is invalid or the user does not have a password."){
+                Alert.alert('','Brukernavn eller Passord er feil!',)
+
+            // FEIL PASSORD
+            }else if (error.message == "There is no user record corresponding to this identifier. The user may have been deleted."){
+                Alert.alert('','Brukernavn eller Passord er feil!',)
+
+            // BRUKEREN HAR IKKE FYLT INN EPOST
+            }else if(error.message == 'First argument "email" must be a valid string.'){
+                Alert.alert('','Vennligst fyll inn feltet for E-post',)
+
+            // BRUKEREN HAR IKKE FYLT INN PASSORD
+            }else if(error.message == 'Second argument "password" must be a valid string.'){
+                Alert.alert('','Vennligst fyll inn feltet for Passord',)
+
+            // DÅRLIG FORMATERT EPOST
+            }else if (error.message == "The email address is badly formatted."){
+                Alert.alert('','E-post adressen du har skrevet inn er ikke gyldig!',)
+
+            // EN ANNEN FEIL HAR OPSTÅTT
+            }else{
+                Alert.alert('','En feil har oppstått!',)
+                console.log(error.message);
+            }
+        }
      };
 
     //Lets the user sign-up
-    const onHandleSignup = () => {
+    const onHandleSignup = async () => {
         try{
             if (email !== '' && password !== '') {
-                auth
+                if (bekreftSignupPassword == password){
+                    await auth
                     .createUserWithEmailAndPassword(email, password)
                     .then(userCredentials => {
                         const user = userCredentials.user;
                         console.log(user.email);
+
+                        //LOGG INN VED REGISTRERING
                         onLogin();
+
+                        setSignup(false)
                     })
+                }else{
+                    Alert.alert('','Passord og Bekreft Passord må være lik!',)
+                    setPassword("");
+                    setBekreftSignupPassword("");
+                }
+
+
+
+            }else{
+                Alert.alert('','Vennligst fyll inn alle feltene!',)
             }
-        }catch(error){
-            console.log(error)
+        } catch(error){
+
+            // EN BRUKER MED DENNE EPOSTEN EKSISTERER ALLEREDE
+            if (error.message == "The email address is already in use by another account."){
+                Alert.alert('','En bruker med denne e-post adressen eksisterer allerede!',)
+            }
+
+            // EPOST ADRESSE HAR FEIL FORMAT
+            else if(error.message == "The email address is badly formatted."){
+                Alert.alert('','E-post adressen du har skrevet inn har feil format!',)
+            }
+
+            //BRUKER HAR SKREVET FOR KORT PASSORD
+            else if(error.message == "Password should be at least 6 characters"){
+                Alert.alert('','Passord må inneholde minimum 6 tegn!',)
+            }else{
+                Alert.alert('','Det har oppstått en feil!',)
+                console.log(error)
+            }
         }
     }
 
@@ -54,21 +135,19 @@ const Login = () => {
         auth.signOut().then(function() {
             // Sign-out successful.
             console.log("Logged out!")
-            setEmail("")
-            setPassword("")
           }, function(error) {
             // An error happened.
           });
     }
 
     //Glemt Passord
-    const handleGlemt = () => {
+    const handleGlemt = async () => {
         try{
-            auth
+            await auth
             .sendPasswordResetEmail(glemtEpost)
-            .then(Alert.alert('','E-post for resetting av ditt passord er sendt', [{text: "Ok", onPress: () => {setGlemtPassord(false)}}]))
+            Alert.alert('','E-post for tilbakestilling av ditt passord er sendt', [{text: "Ok", onPress: () => {setGlemtPassord(false)}}])
         }catch(error){
-            console.log(error)
+            Alert.alert('','Det finnes ingen bruker med denne E-posten!',)
         }
     }
 
@@ -81,9 +160,9 @@ const Login = () => {
                      <Text style={styles.header}>Innlogging</Text>
                     <View style={styles.inputContainer}>
                         <Text>E-post</Text>
-                        <TextInput onChangeText={(username) => {setEmail(username)}} style={styles.input}/>
+                        <TextInput onChangeText={(username) => {setEmail(username)}} style={styles.input} placeholder={"E-post"}/>
                         <Text>Passord</Text>
-                        <TextInput onChangeText={(password) => {setPassword(password)}} style={styles.input} secureTextEntry />
+                        <TextInput onChangeText={(password) => {setPassword(password)}} style={styles.input} secureTextEntry placeholder={"Passord"} />
                     </View>
 
                     {/* REGISTRERING KNAPP*/}
@@ -117,9 +196,9 @@ const Login = () => {
                         <SafeAreaView style={styles.container}>
 
                             {/* INPUT FELT FOR GLEMT PASSORD */}
-                            <Text>E-postadresse</Text>
+                            <Text>E-post</Text>
                             <View style={styles.inputContainer}>
-                                <TextInput onChangeText={(glemt) => {setGlemtEpost(glemt)}} style={styles.input}/>
+                                <TextInput onChangeText={(glemt) => {setGlemtEpost(glemt)}} style={styles.input} placeholder={"E-post"}/>
                             </View>
 
                             {/* BEKREFT GLEMT PASSORD */}
@@ -147,9 +226,12 @@ const Login = () => {
                              <Text style={styles.header}>Registrer</Text>
                             <View style={styles.inputContainer}>
                                 <Text>E-post</Text>
-                                <TextInput onChangeText={(username) => {setEmail(username)}} style={styles.input}/>
+                                <TextInput onChangeText={(username) => {setEmail(username)}} style={styles.input} placeholder={"E-post"} value={email}/>
                                 <Text>Passord</Text>
-                                <TextInput onChangeText={(password) => {setPassword(password)}} style={styles.input} secureTextEntry />
+                                <TextInput onChangeText={(password) => {setPassword(password)}} style={styles.input} secureTextEntry value={password} placeholder={"Passord"}/>
+                                <Text>Bekreft Passord</Text>
+                                <TextInput onChangeText={(password) => {setBekreftSignupPassword(password)}}
+                                style={styles.input} secureTextEntry value={bekreftSignupPassword} placeholder={"Gjenta Passord"}/>
                             </View>
 
                             {/* BEKREFT REGISTRERING */}
@@ -166,15 +248,18 @@ const Login = () => {
             </Modal>
 
             {/* TEKST FOR MAINPAGE */}
-            <Text>Velkommen</Text>
-            <Text>{userEmail}</Text>
+            <View style={styles.container}>
+                <Text>Velkommen</Text>
+                <Text>{userEmail}</Text>
 
-            {/* KNAPP FOR Å LOGGE UT */}
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={(handleLogout)} style={[styles.button, styles.buttonOutline]}>
-                    <Text style={styles.buttonOutlineText}>Logg ut!</Text>
-                </TouchableOpacity>
+                {/* KNAPP FOR Å LOGGE UT */}
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity onPress={(handleLogout)} style={[styles.button, styles.buttonOutline]}>
+                        <Text style={styles.buttonOutlineText}>Logg ut!</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
+
 
         </SafeAreaView>
     )
@@ -219,6 +304,7 @@ const styles = StyleSheet.create({
       //BUTTON
       buttonContainer: {
         width: '60%',
+        minWidth: 235,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 40,
