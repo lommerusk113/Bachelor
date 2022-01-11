@@ -57,7 +57,7 @@ const Login = () => {
             if (error.message == "The password is invalid or the user does not have a password."){
                 Alert.alert('','Brukernavn eller Passord er feil!',)
 
-            // FEIL PASSORD
+            // FEIL E-POST
             }else if (error.message == "There is no user record corresponding to this identifier. The user may have been deleted."){
                 Alert.alert('','Brukernavn eller Passord er feil!',)
 
@@ -102,9 +102,6 @@ const Login = () => {
                     setPassword("");
                     setBekreftSignupPassword("");
                 }
-
-
-
             }else{
                 Alert.alert('','Vennligst fyll inn alle feltene!',)
             }
@@ -143,9 +140,14 @@ const Login = () => {
     //Glemt Passord
     const handleGlemt = async () => {
         try{
-            await auth
-            .sendPasswordResetEmail(glemtEpost)
-            Alert.alert('','E-post for tilbakestilling av ditt passord er sendt', [{text: "Ok", onPress: () => {setGlemtPassord(false)}}])
+            if (glemtEpost !== ""){
+                await auth
+                .sendPasswordResetEmail(glemtEpost)
+                Alert.alert('','E-post for tilbakestilling av ditt passord er sendt', [{text: "Ok", onPress: () => {setGlemtPassord(false)}}])
+            }else{
+                Alert.alert('','Vennligst fyll in feltet!',)
+            }
+
         }catch(error){
             Alert.alert('','Det finnes ingen bruker med denne E-posten!',)
         }
@@ -156,8 +158,8 @@ const Login = () => {
              <Modal  animationType="slide" visible={openLogin} >
                  <View style={styles.container}>
 
-                     {/* SKJEMA FOR INLOGGING */}
-                     <Text style={styles.header}>Innlogging</Text>
+                    {/* SKJEMA FOR INLOGGING */}
+                    <Text style={styles.header}>Innlogging</Text>
                     <View style={styles.inputContainer}>
                         <Text>E-post</Text>
                         <TextInput onChangeText={(username) => {setEmail(username)}} style={styles.input} placeholder={"E-post"}/>
@@ -229,7 +231,7 @@ const Login = () => {
                                 <TextInput onChangeText={(username) => {setEmail(username)}} style={styles.input} placeholder={"E-post"} value={email}/>
                                 <Text>Passord</Text>
                                 <TextInput onChangeText={(password) => {setPassword(password)}} style={styles.input} secureTextEntry value={password} placeholder={"Passord"}/>
-                                <Text>Bekreft Passord</Text>
+                                <Text>Gjenta Passord</Text>
                                 <TextInput onChangeText={(password) => {setBekreftSignupPassword(password)}}
                                 style={styles.input} secureTextEntry value={bekreftSignupPassword} placeholder={"Gjenta Passord"}/>
                             </View>
