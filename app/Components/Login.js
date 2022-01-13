@@ -98,6 +98,7 @@ const Login = () => {
                         setSignup(false)
                     })
                 }else{
+                    //BEKREFT PASSORD OG PASSORD ER ULIK
                     Alert.alert('','Passord og Bekreft Passord må være lik!',)
                     setPassword("");
                     setBekreftSignupPassword("");
