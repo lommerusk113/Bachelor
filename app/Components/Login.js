@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {  StyleSheet,Text, Button, View, Modal, Alert, TextInput, SafeAreaView, TouchableOpacity, Touchable} from 'react-native';
+import {  StyleSheet,Text, Button, View, Modal, Alert, TextInput, SafeAreaView, TouchableOpacity, Touchable, Image} from 'react-native';
 import { auth } from '../config/firebase';
 
 const Login = () => {
@@ -159,6 +159,10 @@ const Login = () => {
              <Modal  animationType="slide" visible={openLogin} >
                  <View style={styles.container}>
 
+                     {/* LOGO */}
+                    <Image style={styles.logo} source={require("../Images/logo.png")}/>
+
+
                     {/* SKJEMA FOR INLOGGING */}
                     <Text style={styles.header}>Innlogging</Text>
                     <View style={styles.inputContainer}>
@@ -197,10 +201,15 @@ const Login = () => {
 
 
                         <SafeAreaView style={styles.container}>
+                            {/* LOGO */}
+                            <Image style={styles.logo} source={require("../Images/logo.png")}/>
+
+                            {/* HEADER */}
+                            <Text style={styles.header}>Glemt Passord</Text>
 
                             {/* INPUT FELT FOR GLEMT PASSORD */}
-                            <Text>E-post</Text>
                             <View style={styles.inputContainer}>
+                                <Text>E-post</Text>
                                 <TextInput onChangeText={(glemt) => {setGlemtEpost(glemt)}} style={styles.input} placeholder={"E-post"}/>
                             </View>
 
@@ -224,6 +233,9 @@ const Login = () => {
                         </TouchableOpacity>
 
                          <SafeAreaView style={styles.container}>
+
+                             {/* LOGO */}
+                            <Image style={styles.logo} source={require("../Images/logo.png")}/>
 
                              {/* SKJEMA FOR REGISTRERING */}
                              <Text style={styles.header}>Registrer</Text>
@@ -273,6 +285,12 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+      },
+
+      //LOGO
+      logo: {
+
+
       },
 
       //TEXT
