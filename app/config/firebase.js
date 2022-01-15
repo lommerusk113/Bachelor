@@ -1,6 +1,6 @@
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
 
-import firebase from "firebase/app";
-require('firebase/auth')
 
 // Initialize Firebase
 
@@ -22,7 +22,8 @@ const firebaseConfig = {
     appId: "1:529406819306:web:2f93146e43c602a6e99093"
 };
 
-//let Firebase;
+// OLD /let Firebase;
+
 let app;
 
 if (firebase.apps.length === 0) {

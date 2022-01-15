@@ -41,6 +41,10 @@ const handleLogin = async ( email, password, navigation, signup) => {
         }else if (error.message == "The email address is badly formatted."){
             Alert.alert('','E-post adressen du har skrevet inn er ikke gyldig!',)
 
+        //BRUKER EKSISTERER IKKE
+        }else if (error.message == "Firebase: There is no user record corresponding to this identifier. The user may have been deleted. (auth/user-not-found)."){
+            Alert.alert('','Brukernavn eller Passord er feil!',)
+
         // EN ANNEN FEIL HAR OPSTÅTT
         }else{
             Alert.alert('','En feil har oppstått!',)
