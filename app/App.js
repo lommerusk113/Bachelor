@@ -43,8 +43,8 @@ export default function App({ navigation }) {
   return (
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Login" option = {{title: "Innlogging"}} component={Loginscreen} />
-          <Stack.Screen name="Home" options={{ title: 'Hjem', headerTitleStyle:{fontSize: 25 }}} component={HomeScreen}/>
+          <Stack.Screen name="Login" options = {{title: "Innlogging", headerShown: false}} component={Loginscreen} />
+          <Stack.Screen name="Home" options={{ title: 'Hjem', headerShown: false}} component={HomeScreen}/>
           <Stack.Screen name="Glemt Passord" option = {{title: "Glemt Passord"}} component={GlemtPassordScreen} />
           <Stack.Screen name="Registrering" option = {{title: "Registrering"}} component={SignupScreen} />
         </Stack.Navigator>
