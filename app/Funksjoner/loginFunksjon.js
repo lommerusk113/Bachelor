@@ -22,7 +22,7 @@ const handleLogin = async ( email, password, navigation, signup) => {
     } catch (error) {
 
         // FEIL PASSORD
-        if (error.message == "The password is invalid or the user does not have a password."){
+        if (error.message == "Firebase: The password is invalid or the user does not have a password. (auth/wrong-password)."){
             Alert.alert('','Brukernavn eller Passord er feil!',)
 
         // FEIL E-POST

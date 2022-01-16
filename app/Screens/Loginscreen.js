@@ -13,8 +13,7 @@ const Loginscreen = ({ navigation }) => {
 
     // LOGIN - FIKS SYNTAX
      const onLogin = async () => {
-       let signup = false
-        await handleLogin(email, password, navigation, signup) == "Finished"
+        await handleLogin(email, password, navigation) == "Finished"
     }
 
 
