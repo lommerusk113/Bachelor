@@ -17,6 +17,7 @@ const handleLogin = async ( email, password, navigation, signup) => {
 
 
       }else{
+          //BRUKER HAR IKKE FYLLT INN NOEN FELT
         Alert.alert('','Vennligst fyll inn feltene for E-post og Passord',)
       }
     } catch (error) {

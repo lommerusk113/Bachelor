@@ -19,6 +19,7 @@ const GlemtPassordScreen = ({ navigation }) => {
             }
 
         }catch(error){
+            //FEIL EPOST
             Alert.alert('','Det finnes ingen bruker med denne E-posten!',)
         }
     }

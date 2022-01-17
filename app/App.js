@@ -4,10 +4,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { auth } from './config/firebase';
 import { Button, View, Text } from 'react-native';
-import Loginscreen from "./Screens/Loginscreen"
-import HomeScreen from "./Screens/HomeScreen"
-import GlemtPassordScreen from "./Screens/GlemtPassordScreen"
-import SignupScreen from "./Screens/SignupScreen"
+
+import Loginscreen from "./Screens/Loginscreen";
+import HomeScreen from "./Screens/HomeScreen";
+import GlemtPassordScreen from "./Screens/GlemtPassordScreen";
+import SignupScreen from "./Screens/SignupScreen";
+import Kjøring from "./Screens/Kjøring";
+import Historikk from "./Screens/Historikk";
 
 export default function App({ navigation }) {
   const Stack = createNativeStackNavigator();
@@ -32,9 +35,9 @@ export default function App({ navigation }) {
     if (initializing) return (<Text>loading...</Text>);
     let loggedin
     if (!user){
-      console.log("not logged in")
+      console.log("not logged in");
     }else{
-      console.log("logged in")
+      console.log("logged in");
     }
 
 
@@ -47,6 +50,8 @@ export default function App({ navigation }) {
           <Stack.Screen name="Home" options={{ title: 'Hjem', headerShown: false}} component={HomeScreen}/>
           <Stack.Screen name="Glemt Passord" option = {{title: "Glemt Passord"}} component={GlemtPassordScreen} />
           <Stack.Screen name="Registrering" option = {{title: "Registrering"}} component={SignupScreen} />
+          <Stack.Screen name="Kjøring" options={{ title: 'Kjøring'}} component={Kjøring}/>
+          <Stack.Screen name="Historikk" options={{ title: 'Historikk'}} component={Historikk}/>
         </Stack.Navigator>
       </NavigationContainer>
   );

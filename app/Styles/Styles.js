@@ -1,4 +1,5 @@
 import {  StyleSheet} from 'react-native';
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 const styles = StyleSheet.create({
     container: {
@@ -6,11 +7,28 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
       },
+      startContainer: {
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 20,
 
-      //LOGO
+      },
+
+      //IMAGE
       logo: {
 
 
+      },
+      kategoriImage: {
+        width: 200,
+        height: 170
+      },
+      playImage: {
+        width: 200,
+        height: 200,
+        borderColor: '#0782F9',
+        borderWidth: 5,
+        borderRadius: 100,
       },
 
       //TEXT
@@ -41,6 +59,12 @@ const styles = StyleSheet.create({
         color: "black",
         fontSize: 20,
         fontWeight: "800",
+      },
+      startContainerText: {
+        fontSize: 20,
+
+
+
       },
 
       //BUTTON
@@ -74,18 +98,22 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         fontSize: 16,
       },
-      backButton: {
-        marginTop: 15,
-        borderWidth: 2,
-        borderColor: '#0782F9',
-        borderRadius: 10,
-        width: 90,
-        height: 35,
-        alignItems: "center",
+      kategoriButton: {
+        borderWidth: 1,
         justifyContent: "center",
-        marginLeft: 5,
-
+        alignItems: "center",
+        width: 250,
+        height: 200,
+        borderRadius: 12,
+        marginBottom:20,
       },
+      startButton: {
+        justifyContent: "center",
+        alignItems: "center",
+        width: 210,
+        height: 210,
+      }
+
 });
 
 export default styles

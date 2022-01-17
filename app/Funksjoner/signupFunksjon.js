@@ -16,6 +16,7 @@ const handleSignup = async (email, password, bekreftSignupPassword, navigation) 
                 Alert.alert('','Passord og Bekreft Passord må være lik!',)
             }
         }else{
+            //BRUKEREN HAR IKKE FYLLT INN NOEN FELT
             Alert.alert('','Vennligst fyll inn alle feltene!',)
         }
     } catch(error){
