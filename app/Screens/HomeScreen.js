@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, View, Text, SafeAreaView, TouchableOpacity, Image} from 'react-native';
+import { Button, View, Text, SafeAreaView, TouchableOpacity, Image, Modal} from 'react-native';
 import { auth } from '../config/firebase';
 import styles from "../Styles/Styles"
 

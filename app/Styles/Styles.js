@@ -1,5 +1,4 @@
 import {  StyleSheet} from 'react-native';
-import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 const styles = StyleSheet.create({
     container: {
@@ -112,7 +111,13 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: 210,
         height: 210,
-      }
+      },
+      backButton: {
+        marginLeft: 20,
+        marginTop: 20,
+        width: 17,
+        height: 17,
+      },
 
 });
 

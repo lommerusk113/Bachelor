@@ -18,6 +18,10 @@ export default function App({ navigation }) {
     const [initializing, setInitializing] = useState(true);
     const [user, setUser] = useState();
 
+
+
+
+
     function handleAuthStateChanged(user) {
       console.log(`handleAuth: user is ${user}`);
       if (user){
@@ -50,7 +54,7 @@ export default function App({ navigation }) {
           <Stack.Screen name="Home" options={{ title: 'Hjem', headerShown: false}} component={HomeScreen}/>
           <Stack.Screen name="Glemt Passord" option = {{title: "Glemt Passord"}} component={GlemtPassordScreen} />
           <Stack.Screen name="Registrering" option = {{title: "Registrering"}} component={SignupScreen} />
-          <Stack.Screen name="Kjøring" options={{ title: 'Kjøring'}} component={Kjøring}/>
+          <Stack.Screen name="Kjøring" options={{ title: 'Kjøring'}} component={Kjøring} />
           <Stack.Screen name="Historikk" options={{ title: 'Historikk'}} component={Historikk}/>
         </Stack.Navigator>
       </NavigationContainer>

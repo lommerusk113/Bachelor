@@ -1,24 +1,25 @@
 import React from 'react'
 import { Button, View, Text, SafeAreaView, TouchableOpacity, Image} from 'react-native';
 import styles from "../Styles/Styles"
-import {useState} from "react";
+import {useState, useEffect} from "react";
 
 const Kjøring = () => {
     const [status, setStatus] = useState(true);
 
     const handleStart = () => {
         setStatus(false)
-    };
+      };
 
-    const handleStop = () => {
+      const handleStop = () => {
         setStatus(true)
-    };
+      };
+
 
     return (
         <SafeAreaView style={styles.container}>
             {/* LOGO */}
             <Image style={styles.logo} source={require("../Images/logo.png")}/>
-            <Text style={styles.header}>Hjem</Text>
+            <Text style={styles.header}>Kjøring</Text>
 
             <View>
                 {status?
