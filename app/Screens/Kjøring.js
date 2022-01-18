@@ -6,8 +6,17 @@ import {useState, useEffect} from "react";
 const Kjøring = () => {
     const [status, setStatus] = useState(true);
 
-    const handleStart = () => {
+    //TESTING
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+    const handleStart = async () => {
         setStatus(false)
+        for (let i = 0; i < 100; i++) {
+            console.log("Counter: " + i)
+            await sleep(1000)
+          }
       };
 
       const handleStop = () => {

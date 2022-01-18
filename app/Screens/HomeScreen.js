@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, View, Text, SafeAreaView, TouchableOpacity, Image, Modal} from 'react-native';
+import { Button, View, Text, SafeAreaView, TouchableOpacity, Image, Modal, SliderComponent} from 'react-native';
 import { auth } from '../config/firebase';
 import styles from "../Styles/Styles"
 
@@ -16,6 +16,8 @@ const HomeScreen = ({ navigation }) => {
         navigation.replace('Login')
     }
     const user = auth.currentUser
+
+
 
     return (
         <SafeAreaView style={styles.container}>
