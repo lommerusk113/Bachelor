@@ -4,24 +4,37 @@ import styles from "../Styles/Styles"
 import {useState, useEffect} from "react";
 
 const Kjøring = () => {
-    const [status, setStatus] = useState(true);
+    const [start, setStart] = useState(false);
 
+    let stop = false
     //TESTING
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
       }
 
     const handleStart = async () => {
-        setStatus(false)
-        for (let i = 0; i < 100; i++) {
-            console.log("Counter: " + i)
-            await sleep(1000)
-          }
+        setStart(true)
+        console.log("Starting")
+        stop = false
       };
 
-      const handleStop = () => {
-        setStatus(true)
-      };
+    const handleStop = () => {
+        stop = true
+        setStart(false)
+    };
+
+    useEffect (async () => {
+        if (start){
+            for (let i = 0; i < 10; i++) {
+                console.log("Counter: " + i)
+                if (stop){
+                    console.log("Stopped")
+                    return;
+                }
+                await sleep(1000)
+              }
+        }
+    }, [start, stop])
 
 
     return (
@@ -31,7 +44,7 @@ const Kjøring = () => {
             <Text style={styles.header}>Kjøring</Text>
 
             <View>
-                {status?
+                {!start?
                     //START KNAPP
                     <View style={styles.startContainer}>
                         <TouchableOpacity onPress={handleStart} style={styles.startButton}>
