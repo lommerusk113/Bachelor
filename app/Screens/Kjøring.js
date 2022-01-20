@@ -2,38 +2,106 @@ import React from 'react'
 import { Button, View, Text, SafeAreaView, TouchableOpacity, Image} from 'react-native';
 import styles from "../Styles/Styles"
 import {useState, useEffect} from "react";
+import {starting, handleStateChange} from "../Funksjoner/kjøringbutton"
+import { auth } from '../config/firebase';
+import { addDb } from "../config/firebasedb"
 
-const Kjøring = () => {
-    const [start, setStart] = useState(false);
+import * as Location from "expo-location";
 
+const Kjøring = ({ route: {params}}) => {
+    // HVILKEN KNAPP SKAL VISES
+    const [start, setStart] = useState();
+
+    // TRACKING
+    const [location, setLocation] = useState(null);
+    const [errorMsg, setErrorMsg] = useState(null);
+
+
+
+    // TO BE STORED
+    let storage =
+        {
+            name: auth.currentUser.email,
+            duration: 0,
+            distance: "",
+            coords: []
+        }
+
+
+
+    //FOR Å STOPPE FUNKSJONEN
     let stop = false
-    //TESTING
+
+    // VENT X ANTALL MS
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
       }
 
+    //BRUKER HAR TRYKT PÅ STARTKNAPPEN
     const handleStart = async () => {
         setStart(true)
+        handleStateChange(true)
         console.log("Starting")
         stop = false
       };
 
+    //BRUKEN HAR TRYKKET PÅ STOPP KNAPPEN
     const handleStop = () => {
         stop = true
         setStart(false)
+        handleStateChange(false)
     };
 
+    // ASK PERMISSION AND TRACK USER
+    const handleTracking = async () => {
+        let {status} = await Location.requestForegroundPermissionsAsync();
+        // USER DID NOT ACCEPT
+        if (status !== "granted"){
+            setErrorMsg('Permission to access location was denied');
+            return;
+        }
+        //USER HAS ACCEPTED
+        let location = await Location.getCurrentPositionAsync({});
+        setLocation(location);
+        if(location){
+            storage.coords.push(location);
+        }
+    }
+
+    //CALCULATE DISTANCE
+    const distance = () => {
+        storage.coords.forEach(element => {
+            //console.log(element.coords.latitude)
+            //console.log(element.coords.longitude)
+        })
+    }
+
+
     useEffect (async () => {
-        if (start){
-            for (let i = 0; i < 10; i++) {
+        // PAGE HAS NOT BEEN REFRESHED AND BUTTON HAS BEEN STARTED
+        if (start && starting)
+            // WHILE BUTTON IS STARTED
+            for (let i = 0; i < Infinity; i++) {
                 console.log("Counter: " + i)
-                if (stop){
+
+                // TRACK USER EVERY 10 SEC
+                if (i % 10 === 0){
+                    handleTracking()
+                }
+                // USER HAS STOPPED
+                if (starting == false){
                     console.log("Stopped")
+                    storage.duration = i;
+                    //CALCULATE DISTANCE
+                   // distance();
+                   //STORE TO DATABASE
+                   if(i > 10){
+                    addDb(storage)
+                   }
                     return;
                 }
                 await sleep(1000)
-              }
-        }
+            }
     }, [start, stop])
 
 
@@ -44,7 +112,7 @@ const Kjøring = () => {
             <Text style={styles.header}>Kjøring</Text>
 
             <View>
-                {!start?
+                {!starting?
                     //START KNAPP
                     <View style={styles.startContainer}>
                         <TouchableOpacity onPress={handleStart} style={styles.startButton}>

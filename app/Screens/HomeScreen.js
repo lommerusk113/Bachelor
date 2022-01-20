@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Button, View, Text, SafeAreaView, TouchableOpacity, Image, Modal, SliderComponent} from 'react-native';
 import { auth } from '../config/firebase';
 import styles from "../Styles/Styles"
