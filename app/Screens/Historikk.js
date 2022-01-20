@@ -48,6 +48,7 @@ const Historikk = () => {
                         <Text>{data.duration} Sekunder</Text>
                         <Text>Startet:</Text>
                         <Text>lat: {data.coords[0].coords.latitude} lon: {data.coords[0].coords.longitude}</Text>
+                        <Text>{data.distance} Km</Text>
                     </View>
                 )
             })}

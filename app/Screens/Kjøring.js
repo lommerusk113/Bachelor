@@ -70,12 +70,37 @@ const Kjøring = ({ route: {params}}) => {
 
     //CALCULATE DISTANCE
     const distance = () => {
-        storage.coords.forEach(element => {
-            //console.log(element.coords.latitude)
-            //console.log(element.coords.longitude)
+        let dist = 0
+        storage.coords.forEach((element, index) => {
+            if ((index + 1) != storage.coords.length){
+                let lat1 = element.coords.latitude
+                let lon1 = element.coords.longitude
+                let lat2 = storage.coords[index + 1].coords.latitude
+                let lon2 = storage.coords[index + 1].coords.longitude
+                dist = dist + calcDistance(lat1, lat2, lon1, lon2)
+            }
         })
+        return  (dist).toFixed(3)
     }
 
+    const calcDistance = (lat1, lat2, lon1, lon2) => {
+        // CALCULATE THE DATA
+
+
+        const R = 6371e3; // metres
+        const latitude1 = lat1 * Math.PI/180; // φ, λ in radians
+        const latitude2 = lat2 * Math.PI/180;
+        const deltaLatitude = (lat2-lat1) * Math.PI/180;
+        const deltaLongitude = (lon2-lon1) * Math.PI/180;
+
+        const a = Math.sin(deltaLatitude/2) * Math.sin(deltaLatitude/2) +
+                Math.cos(latitude1) * Math.cos(latitude2) *
+                Math.sin(deltaLongitude/2) * Math.sin(deltaLongitude/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        const d = (R * c) / 1000; //KM
+        return d
+    }
 
     useEffect (async () => {
         // PAGE HAS NOT BEEN REFRESHED AND BUTTON HAS BEEN STARTED
@@ -85,7 +110,7 @@ const Kjøring = ({ route: {params}}) => {
                 console.log("Counter: " + i)
 
                 // TRACK USER EVERY 10 SEC
-                if (i % 10 === 0){
+                if (i % 5 === 0){
                     handleTracking()
                 }
                 // USER HAS STOPPED
@@ -93,7 +118,7 @@ const Kjøring = ({ route: {params}}) => {
                     console.log("Stopped")
                     storage.duration = i;
                     //CALCULATE DISTANCE
-                   // distance();
+                   storage.distance = distance();
                    //STORE TO DATABASE
                    if(i > 10){
                     addDb(storage)
