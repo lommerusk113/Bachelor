@@ -1,9 +1,10 @@
 import React, {useState} from 'react'
-import { Button, View, Text, SafeAreaView, TouchableOpacity, Image, Modal, SliderComponent} from 'react-native';
+import { Button, View, Text, SafeAreaView, TouchableOpacity, Image, Modal, SliderComponent, Pressable} from 'react-native';
 import { auth } from '../config/firebase';
 import styles from "../Styles/Styles"
 
 const HomeScreen = ({ navigation }) => {
+    const [modalOpen, setModalOpen] = useState(false);
 
     //LOGG UT
     const handleLogout = () => {
@@ -26,26 +27,25 @@ const HomeScreen = ({ navigation }) => {
 
             <Text style={styles.header}>Hjem</Text>
             <View style={styles.buttonContainer}>
-
                 {/* KJØRING KNAPP */}
-                <TouchableOpacity title="Kjøring" onPress={() => {navigation.navigate("Kjøring")}} style={styles.kategoriButton}>
+                <Pressable title="Kjøring" onPress={() => {navigation.navigate("Kjøring")}} style={styles.kategoriButton}>
                     <Image style={styles.kategoriImage} source={require("../Images/Kjøring.png")} />
                     <Text style={styles.buttonOutlineText}>Kjøring</Text>
-                </TouchableOpacity>
+                </Pressable>
 
                 {/* HISTORIKK KNAPP */}
-                <TouchableOpacity title="Historikk" onPress={() => {navigation.navigate("Historikk")}} style={styles.kategoriButton}>
+                <Pressable title="Historikk" onPress={() => {navigation.navigate("Historikk")}} style={styles.kategoriButton}>
                     <Image style={styles.kategoriImage} source={require("../Images/Historikk.png")} />
                     <Text style={styles.buttonOutlineText}>Historikk</Text>
-                </TouchableOpacity>
+                </Pressable>
 
 
                 <Text>Innlogget som:</Text>
                 <Text>{user? user.email: "Bruker"}</Text>
                 {/* LOGG UT KNAPP */}
-                <TouchableOpacity title="Logg Ut" onPress={handleLogout} style={[styles.button, styles.buttonOutline]}>
+                <Pressable title="Logg Ut" onPress={handleLogout} style={[styles.button, styles.buttonOutline]}>
                     <Text style={styles.buttonOutlineText}>Logg Ut</Text>
-                </TouchableOpacity>
+                </Pressable>
             </View>
 
         </SafeAreaView>

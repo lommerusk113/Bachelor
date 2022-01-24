@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import {  StyleSheet,Text, Button, View, Modal, Alert, TextInput, SafeAreaView, TouchableOpacity, Touchable, Image} from 'react-native';
+import {useState, useEffect} from "react";
+import {  StyleSheet,Text, Button, View, Modal, Alert, TextInput, SafeAreaView, TouchableOpacity, Touchable, Image, Pressable} from 'react-native';
 import { auth } from '../config/firebase';
 import { handleLogin } from "../Funksjoner/loginFunksjon"
 import {handleSignup  } from "../Funksjoner/signupFunksjon"
@@ -9,6 +9,9 @@ const Loginscreen = ({ navigation }) => {
     //LOGIN INPUT
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
+
+
+
 
 
     // LOGIN - FIKS SYNTAX
@@ -40,14 +43,14 @@ const Loginscreen = ({ navigation }) => {
                 {/* KNAPPER FOR INLOGGING SKJEMA */}
                 <View style={styles.buttonContainer}>
                     {/* LOGIN KNAPP */}
-                    <TouchableOpacity onPress={onLogin} style={[styles.button, styles.buttonOutline]}>
+                    <Pressable onPress={onLogin} style={[styles.button, styles.buttonOutline]}>
                         <Text style={styles.buttonOutlineText}>Logg Inn!</Text>
-                    </TouchableOpacity>
+                    </Pressable>
 
                     {/* GLEMT PASSORD */}
-                    <TouchableOpacity onPress={() => navigation.navigate('Glemt Passord')} style={[styles.button, styles.buttonOutline]}>
+                    <Pressable onPress={() => navigation.navigate('Glemt Passord')} style={[styles.button, styles.buttonOutline]}>
                         <Text style={styles.buttonOutlineText}>Glemt Passord?</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
 
         </SafeAreaView>

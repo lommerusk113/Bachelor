@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app"
-import { getFirestore, collection, getDocs, addDoc, query, where, onSnapshot } from "firebase/firestore"
+import { getFirestore, collection, getDocs, addDoc, query, where, onSnapshot, updateDoc, doc, setDoc, deleteDoc} from "firebase/firestore"
 import { ImageBackgroundBase } from "react-native";
 
 
@@ -29,5 +29,14 @@ const addDb = async (data) => {
     })
 }
 
+//UPDATE TITLE
+const updateTitle = async ( data, id ) => {
+    await setDoc(doc(db, "Kjøreturer", id), data)
+}
 
-export {addDb}
+//DELETE TRIP
+const deleteDB = async (id) => {
+    await deleteDoc(doc(db, "Kjøreturer", id));
+}
+
+export {addDb, updateTitle, deleteDB}

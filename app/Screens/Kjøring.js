@@ -1,10 +1,11 @@
 import React from 'react'
-import { Button, View, Text, SafeAreaView, TouchableOpacity, Image} from 'react-native';
+import { Button, View, Text, SafeAreaView, TouchableOpacity, Image, Pressable} from 'react-native';
 import styles from "../Styles/Styles"
 import {useState, useEffect} from "react";
 import {starting, handleStateChange} from "../Funksjoner/kjøringbutton"
 import { auth } from '../config/firebase';
 import { addDb } from "../config/firebasedb"
+import Stopwatch from "../Components/Stopwatch"
 
 import * as Location from "expo-location";
 
@@ -24,7 +25,8 @@ const Kjøring = ({ route: {params}}) => {
             name: auth.currentUser.email,
             duration: 0,
             distance: "",
-            coords: []
+            coords: [],
+            title: "",
         }
 
 
@@ -102,13 +104,12 @@ const Kjøring = ({ route: {params}}) => {
         return d
     }
 
+
     useEffect (async () => {
         // PAGE HAS NOT BEEN REFRESHED AND BUTTON HAS BEEN STARTED
         if (start && starting)
             // WHILE BUTTON IS STARTED
             for (let i = 0; i < Infinity; i++) {
-                console.log("Counter: " + i)
-
                 // TRACK USER EVERY 10 SEC
                 if (i % 5 === 0){
                     handleTracking()
@@ -127,7 +128,7 @@ const Kjøring = ({ route: {params}}) => {
                 }
                 await sleep(1000)
             }
-    }, [start, stop])
+    }, [start])
 
 
     return (
@@ -140,22 +141,22 @@ const Kjøring = ({ route: {params}}) => {
                 {!starting?
                     //START KNAPP
                     <View style={styles.startContainer}>
-                        <TouchableOpacity onPress={handleStart} style={styles.startButton}>
+                        <Pressable onPress={handleStart} style={styles.startButton}>
                             <Image style={styles.playImage} source={require("../Images/Play.png")} />
-                        </TouchableOpacity>
+                        </Pressable>
                         <Text style={styles.startContainerText}>Start</Text>
                     </View>
                 :
                     //STOPP KNAPP
                     <View style={styles.startContainer}>
-                        <TouchableOpacity onPress={handleStop} style={styles.startButton}>
+                        <Pressable onPress={handleStop} style={styles.startButton}>
                             <Image style={styles.playImage} source={require("../Images/Stop.png")} />
-                        </TouchableOpacity>
+                        </Pressable>
                         <Text style={styles.startContainerText}>Stopp</Text>
                     </View>
                 }
-
             </View>
+            <Stopwatch />
         </SafeAreaView>
     )
 }

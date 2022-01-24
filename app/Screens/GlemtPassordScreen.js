@@ -1,7 +1,7 @@
 import { auth } from '../config/firebase';
 import React, {useState} from 'react'
 import styles from "../Styles/Styles"
-import {  StyleSheet,Text, Button, View, Modal, Alert, TextInput, SafeAreaView, TouchableOpacity, Touchable, Image} from 'react-native';
+import {  StyleSheet,Text, Button, View, Modal, Alert, TextInput, SafeAreaView, TouchableOpacity, Touchable, Image, Pressable} from 'react-native';
 
 const GlemtPassordScreen = ({ navigation }) => {
         //E-POST FOR GLEMT BRUKER
@@ -40,9 +40,9 @@ const GlemtPassordScreen = ({ navigation }) => {
 
             {/* BEKREFT GLEMT PASSORD */}
             <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={handleGlemt} style={[styles.button, styles.buttonOutline]}>
+                <Pressable onPress={handleGlemt} style={[styles.button, styles.buttonOutline]}>
                     <Text style={styles.buttonOutlineText}>Bekreft!</Text>
-                </TouchableOpacity>
+                </Pressable>
             </View>
 
         </SafeAreaView>

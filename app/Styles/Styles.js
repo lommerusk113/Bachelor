@@ -118,6 +118,28 @@ const styles = StyleSheet.create({
         width: 17,
         height: 17,
       },
+    // HISTORIKK
+    historikkDisplay: {
+      borderWidth: 1,
+      borderRadius: 12,
+      width: 300,
+      padding: 15,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "white",
+    },
+    turWrapper: {
+      marginTop: 20,
+      width: "100%",
+    },
+    turContainer: {
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    flexContainer: {
+      display: "flex",
+      flexDirection: "row",
+    },
 
 });
 

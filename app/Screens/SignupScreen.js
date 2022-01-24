@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {  StyleSheet,Text, Button, View, Modal, Alert, TextInput, SafeAreaView, TouchableOpacity, Touchable, Image} from 'react-native';
+import {  StyleSheet,Text, Button, View, Modal, Alert, TextInput, SafeAreaView, TouchableOpacity, Touchable, Image, Pressable} from 'react-native';
 import { auth } from '../config/firebase';
 import { handleSignup  } from "../Funksjoner/signupFunksjon"
 import styles from "../Styles/Styles"
@@ -38,9 +38,9 @@ const SignupScreen = ({ navigation }) => {
 
                 {/* BEKREFT REGISTRERING */}
                 <View style={styles.buttonContainer}>
-                        <TouchableOpacity onPress= {onHandleSignup} style={[styles.button, styles.buttonOutline]}>
+                        <Pressable onPress= {onHandleSignup} style={[styles.button, styles.buttonOutline]}>
                             <Text style={styles.buttonOutlineText}>Registrer!</Text>
-                        </TouchableOpacity>
+                        </Pressable>
                 </View>
         </SafeAreaView>
     )

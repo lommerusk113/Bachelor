@@ -11,14 +11,13 @@ import GlemtPassordScreen from "./Screens/GlemtPassordScreen";
 import SignupScreen from "./Screens/SignupScreen";
 import Kjøring from "./Screens/Kjøring";
 import Historikk from "./Screens/Historikk";
+import HistorikkUnderside from "./Screens/HistorikkUnderside";
 
 export default function App({ navigation }) {
   const Stack = createNativeStackNavigator();
 
     const [initializing, setInitializing] = useState(true);
     const [user, setUser] = useState();
-
-
 
 
 
@@ -51,12 +50,16 @@ export default function App({ navigation }) {
   return (
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Login" options = {{title: "Innlogging", headerShown: false}} component={Loginscreen} />
-          <Stack.Screen name="Home" options={{ title: 'Hjem', headerShown: false}} component={HomeScreen}/>
+          {!user?
+            <Stack.Screen name="Login" options = {{title: "Innlogging", headerShown: false}} component={Loginscreen} />
+          :
+            <Stack.Screen name="Home" options={{ title: 'Hjem', headerShown: false}} component={HomeScreen}/>
+          }
           <Stack.Screen name="Glemt Passord" option = {{title: "Glemt Passord"}} component={GlemtPassordScreen} />
           <Stack.Screen name="Registrering" option = {{title: "Registrering"}} component={SignupScreen} />
           <Stack.Screen name="Kjøring" options={{ title: 'Kjøring'}} component={Kjøring}/>
           <Stack.Screen name="Historikk" options={{ title: 'Historikk'}} component={Historikk}/>
+          <Stack.Screen name="HistorikkUnderside" options={{ title: 'Din Kjøretur'}} component={HistorikkUnderside}/>
         </Stack.Navigator>
       </NavigationContainer>
   );
