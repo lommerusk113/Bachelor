@@ -140,6 +140,19 @@ const styles = StyleSheet.create({
       display: "flex",
       flexDirection: "row",
     },
+    lagreButton: {
+      marginTop: 5,
+      borderColor: "blue",
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "white",
+      borderWidth: 2,
+      width: 75,
+      height: 30,
+      borderRadius: 9,
+
+
+    }
 
 });
 

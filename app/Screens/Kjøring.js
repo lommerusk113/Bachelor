@@ -12,6 +12,7 @@ import * as Location from "expo-location";
 const Kjøring = ({ route: {params}}) => {
     // HVILKEN KNAPP SKAL VISES
     const [start, setStart] = useState();
+    const[mounted, setMounted] = useState(false);
 
     // TRACKING
     const [location, setLocation] = useState(null);
@@ -110,10 +111,16 @@ const Kjøring = ({ route: {params}}) => {
         if (start && starting)
             // WHILE BUTTON IS STARTED
             for (let i = 0; i < Infinity; i++) {
+                //CHECK IF APP IS MOUNTED
+                if (!mounted){
+                    setMounted(true)
+                }
                 // TRACK USER EVERY 10 SEC
                 updateCounter(i)
                 if (i % 5 === 0){
-                    handleTracking()
+                    if (mounted){
+                        handleTracking()
+                    }
                 }
                 // USER HAS STOPPED
                 if (starting == false){
@@ -129,7 +136,7 @@ const Kjøring = ({ route: {params}}) => {
                 }
                 await sleep(1000)
             }
-    }, [start])
+    }, [starting])
 
 
     return (

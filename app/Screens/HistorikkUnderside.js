@@ -9,6 +9,7 @@ const HistorikkUnderside = ({navigation,  route: {params}}) => {
     const handleUpdateTitle = () => {
         params.data.title = tittel
         updateTitle(params.data, params.id)
+        setTittel("")
 
     };
 
@@ -26,10 +27,10 @@ const HistorikkUnderside = ({navigation,  route: {params}}) => {
 
            <View style={{flex: 1}}>
                <Text style={{marginTop: 50}}>Tittel</Text>
-               <TextInput onChangeText={(text) => {setTittel(text)}} style={styles.input} placeholder={params.data.title}/>
+               <TextInput onChangeText={(text) => {setTittel(text)}} style={styles.input} placeholder={params.data.title} value={tittel}/>
                 {
                 tittel?
-                <Pressable onPress={handleUpdateTitle}>
+                <Pressable onPress={handleUpdateTitle} style={styles.lagreButton}>
                     <Text>Lagre</Text>
                 </Pressable>
                 :null}

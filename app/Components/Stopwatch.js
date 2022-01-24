@@ -29,7 +29,7 @@ const Stopwatch = () => {
             calcTime(0)
         }
         return () => clearInterval(interval)
-    }, [counter, starting])
+    }, [starting])
 
 
 
@@ -40,7 +40,7 @@ const Stopwatch = () => {
                {calcedTime?
                 calcedTime
                 :
-                <Text>Loadin counter...</Text>
+                <Text>Loading counter...</Text>
                }
             </Text>
         </View>
