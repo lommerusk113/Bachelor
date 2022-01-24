@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Button, View, Text, SafeAreaView, TouchableOpacity, Image, Pressable} from 'react-native';
-import {starting} from "../Funksjoner/kjøringbutton"
+import {starting, counter} from "../Funksjoner/kjøringbutton"
 
 const Stopwatch = () => {
     const [time, setTime] = useState(0);
@@ -20,18 +20,16 @@ const Stopwatch = () => {
 
     useEffect (() => {
         let interval = null;
-        let prevTime = 0
         if (starting) {
             interval = setInterval(() => {
-                prevTime = prevTime + 1
-                calcTime(prevTime)
+                calcTime(counter + 1)
             }, 1000)
         }else {
             clearInterval(interval)
             calcTime(0)
         }
         return () => clearInterval(interval)
-    }, [starting])
+    }, [counter, starting])
 
 
 
@@ -39,8 +37,10 @@ const Stopwatch = () => {
   return(
        <View>
            <Text>
-               {
+               {calcedTime?
                 calcedTime
+                :
+                <Text>Loadin counter...</Text>
                }
             </Text>
         </View>

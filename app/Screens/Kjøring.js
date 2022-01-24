@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, View, Text, SafeAreaView, TouchableOpacity, Image, Pressable} from 'react-native';
 import styles from "../Styles/Styles"
 import {useState, useEffect} from "react";
-import {starting, handleStateChange} from "../Funksjoner/kjøringbutton"
+import {starting, handleStateChange, updateCounter} from "../Funksjoner/kjøringbutton"
 import { auth } from '../config/firebase';
 import { addDb } from "../config/firebasedb"
 import Stopwatch from "../Components/Stopwatch"
@@ -111,6 +111,7 @@ const Kjøring = ({ route: {params}}) => {
             // WHILE BUTTON IS STARTED
             for (let i = 0; i < Infinity; i++) {
                 // TRACK USER EVERY 10 SEC
+                updateCounter(i)
                 if (i % 5 === 0){
                     handleTracking()
                 }
@@ -156,7 +157,7 @@ const Kjøring = ({ route: {params}}) => {
                     </View>
                 }
             </View>
-            <Stopwatch />
+            <Stopwatch/>
         </SafeAreaView>
     )
 }
