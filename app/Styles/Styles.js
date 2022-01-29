@@ -152,6 +152,27 @@ const styles = StyleSheet.create({
       borderRadius: 9,
 
 
+    },
+    picker: {
+      width: 183,
+      color: "black",
+    },
+    pickerContainer:{
+      borderBottomWidth: 1,
+      marginLeft: 190,
+      marginTop: 10,
+    },
+    description:{
+      backgroundColor: 'rgb(220, 220,220)',
+      paddingHorizontal: 15,
+      paddingVertical: 10,
+      borderRadius: 10,
+      marginTop: 15,
+      color: "black",
+      fontSize: 20,
+      fontWeight: "800",
+      width: 200,
+      height: 150,
     }
 
 });

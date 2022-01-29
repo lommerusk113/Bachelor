@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, View, Text, SafeAreaView, TouchableOpacity, Image, Pressable} from 'react-native';
+import { Button, View, Text, SafeAreaView, TouchableOpacity, Image, Pressable, Picker} from 'react-native';
 import styles from "../Styles/Styles"
 import {useState, useEffect} from "react";
 import {starting, handleStateChange, updateCounter} from "../Funksjoner/kjøringbutton"
@@ -28,6 +28,10 @@ const Kjøring = ({ route: {params}}) => {
             distance: "",
             coords: [],
             title: "",
+            time: "",
+            date: "",
+            clock: "",
+            description: "",
         }
 
 
@@ -64,7 +68,7 @@ const Kjøring = ({ route: {params}}) => {
             return;
         }
         //USER HAS ACCEPTED
-        let location = await Location.getCurrentPositionAsync({});
+        let location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.BestForNavigation});
         setLocation(location);
         if(location){
             storage.coords.push(location);
@@ -106,28 +110,44 @@ const Kjøring = ({ route: {params}}) => {
     }
 
 
+    //CURRENT TIME
+    const getTime = () => {
+        let today = new Date()
+        storage.time = today;
+        storage.date = today.getDate() + "." + (today.getMonth() + 1) + "." + today.getFullYear()
+
+        let hour =  today.getUTCHours() + 1
+        let minutes = today.getMinutes();
+
+        if (hour < 10){hour = "0" + hour}
+        if (minutes < 10){minutes = "0" + minutes}
+
+        storage.clock = hour + " : " + minutes
+
+
+    }
+
+    // BYTT TIL WHILE ELLER DO WHILE
     useEffect (async () => {
         // PAGE HAS NOT BEEN REFRESHED AND BUTTON HAS BEEN STARTED
         if (start && starting)
             // WHILE BUTTON IS STARTED
             for (let i = 0; i < Infinity; i++) {
-                //CHECK IF APP IS MOUNTED
-                if (!mounted){
-                    setMounted(true)
-                }
                 // TRACK USER EVERY 10 SEC
                 updateCounter(i)
-                if (i % 5 === 0){
-                    if (mounted){
-                        handleTracking()
-                    }
+                if (i % 2 === 0){
+                    handleTracking()
                 }
                 // USER HAS STOPPED
                 if (starting == false){
+                    // STOPPING COORDINATES
+                    handleTracking()
                     console.log("Stopped")
                     storage.duration = i;
                     //CALCULATE DISTANCE
                    storage.distance = distance();
+                   //ADD TIME
+                   getTime()
                    //STORE TO DATABASE
                    if(i > 10){
                     addDb(storage)
@@ -144,7 +164,6 @@ const Kjøring = ({ route: {params}}) => {
             {/* LOGO */}
             <Image style={styles.logo} source={require("../Images/logo.png")}/>
             <Text style={styles.header}>Kjøring</Text>
-
             <View>
                 {!starting?
                     //START KNAPP

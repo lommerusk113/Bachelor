@@ -1,10 +1,13 @@
 import React, {useState, useEffect} from 'react'
-import { Button, View, Text, SafeAreaView, TouchableOpacity, Image, ScrollView, Pressable} from 'react-native';
+import { Button, View, Text, SafeAreaView, TouchableOpacity, Image, ScrollView, Pressable, useColorScheme} from 'react-native';
 import { fetchDb } from '../config/firebasedb';
 import { auth } from '../config/firebase';
-import { getFirestore, collection, getDocs, addDoc, query, where, onSnapshot } from "firebase/firestore"
+import { getFirestore, collection, getDocs, addDoc, query, where, onSnapshot} from "firebase/firestore"
+
+import { Picker } from "@react-native-picker/picker";
 
 
+//import { Dropdown } from 'react-native-element-dropdown';
 
 // REACT NATIVE MAPS | EXPO-PERMISSIONS | EXPO-LOCATION
 
@@ -14,8 +17,11 @@ const Historikk = ({ navigation }) => {
     const [data, setData] = useState();
     const [time, setTime] = useState();
 
-    const user = auth.currentUser.email
+    const [selected, setSelected] = useState('newest');
 
+    const [sorting, setSorting] = useState(false)
+
+    const user = auth.currentUser.email
 
 
 
@@ -64,8 +70,42 @@ const Historikk = ({ navigation }) => {
         handleDuration()
    },[data])
 
+   useEffect (() => {
+       if (data){
 
-    if (!time){
+        setSorting(false)
+        switch(selected){
+            case "newest":
+                data.sort((a, b) => (a.time > b.time) ? 1 : -1)
+                setSorting(true)
+                break;
+            case "oldest":
+                data.sort((a, b) => (a.time < b.time) ? 1 : -1)
+                setSorting(true)
+                break;
+            case "longest":
+                data.sort((a, b) => (a.duration < b.duration) ? 1 : -1)
+                setSorting(true)
+                break;
+            case "shortest":
+                data.sort((a, b) => (a.duration > b.duration) ? 1 : -1)
+                setSorting(true)
+                break;
+            case "longDist":
+                data.sort((a, b) => (a.distance > b.distance) ? 1 : -1)
+                setSorting(true)
+                break;
+            case "shortDist":
+                data.sort((a, b) => (a.distance < b.distance) ? 1 : -1)
+                setSorting(true)
+                break;
+
+        }
+    }
+
+   },[selected, data])
+
+    if (!time || !sorting ){
         return(<Text>Loading...</Text>)
     }else{
 
@@ -75,6 +115,22 @@ const Historikk = ({ navigation }) => {
             {/* LOGO */}
             <Image style={[styles.logo, {marginTop: 20}]} source={require("../Images/logo.png")}/>
             <Text style={styles.header}>Dine Kjøreturer</Text>
+            <View style={styles.pickerContainer}>
+                <Picker
+                    selectedValue={selected}
+                    onValueChange={(value, index) => setSelected(value)}
+                    mode="dropdown" // Android only
+                    style={[styles.picker]}
+                >
+                    <Picker.Item label= "Nyeste Først" value= "newest" />
+                    <Picker.Item label="Eldste Først" value= "oldest"/>
+                    <Picker.Item label="Lengste Tid" value= "longest" />
+                    <Picker.Item label="Korteste Tid" value= "shortest" />
+                    <Picker.Item label="Lengste Avstand" value= "longDist" />
+                    <Picker.Item label="Korteste Avstand" value= "shortDist"  />
+                </Picker>
+            </View>
+
             <ScrollView style={styles.turWrapper}>
                 <View style={styles.turContainer}>
                     {data?.map(function(data, index){
@@ -84,6 +140,10 @@ const Historikk = ({ navigation }) => {
                                 email: data.name, duration: time[index], distance: data.distance, title: data.tittel, id: data.id, data: data
                             })}}>
                                 <Text style={{marginBottom: 20}}>{data.title? data.title : data.name}</Text>
+                                <View style={styles.flexContainer}>
+                                    <Text style={{marginRight: 80}}>Kl. {data.clock}</Text>
+                                    <Text>{data.date}</Text>
+                                </View>
                                 <View style={styles.flexContainer}>
                                     <Text style={{marginRight: 80}}>{data.distance} Km</Text>
                                     <Text>{time? time[index] : null}</Text>

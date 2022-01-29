@@ -12,6 +12,7 @@ import SignupScreen from "./Screens/SignupScreen";
 import Kjøring from "./Screens/Kjøring";
 import Historikk from "./Screens/Historikk";
 import HistorikkUnderside from "./Screens/HistorikkUnderside";
+import Mapscreen from './Screens/Mapscreen';
 
 export default function App({ navigation }) {
   const Stack = createNativeStackNavigator();
@@ -53,13 +54,19 @@ export default function App({ navigation }) {
           {!user?
             <Stack.Screen name="Login" options = {{title: "Innlogging", headerShown: false}} component={Loginscreen} />
           :
+          <>
             <Stack.Screen name="Home" options={{ title: 'Hjem', headerShown: false}} component={HomeScreen}/>
+            <Stack.Screen name="Login" options = {{title: "Innlogging", headerShown: false}} component={Loginscreen} />
+          </>
+
           }
+
           <Stack.Screen name="Glemt Passord" option = {{title: "Glemt Passord"}} component={GlemtPassordScreen} />
           <Stack.Screen name="Registrering" option = {{title: "Registrering"}} component={SignupScreen} />
           <Stack.Screen name="Kjøring" options={{ title: 'Kjøring'}} component={Kjøring}/>
           <Stack.Screen name="Historikk" options={{ title: 'Historikk'}} component={Historikk}/>
           <Stack.Screen name="HistorikkUnderside" options={{ title: 'Din Kjøretur'}} component={HistorikkUnderside}/>
+          <Stack.Screen name="Mapscreen"  options={({ route }) => ({ title: route.params.title })} component={Mapscreen}/>
         </Stack.Navigator>
       </NavigationContainer>
   );
