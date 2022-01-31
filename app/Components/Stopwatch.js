@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { Button, View, Text, SafeAreaView, TouchableOpacity, Image, Pressable} from 'react-native';
-import {starting, counter} from "../Funksjoner/kjøringbutton"
+import {starting, counter} from "../Funksjoner/Kjørefunksjon"
+import KjøringStyles from '../Styles/KjøringStyles';
 
 const Stopwatch = () => {
-    const [time, setTime] = useState(0);
     const [calcedTime, setCalcedTime] = useState()
 
     const calcTime = (prevTime) => {
@@ -22,7 +22,7 @@ const Stopwatch = () => {
         let interval = null;
         if (starting) {
             interval = setInterval(() => {
-                calcTime(counter + 1)
+                calcTime(counter)
             }, 1000)
         }else {
             clearInterval(interval)
@@ -35,7 +35,7 @@ const Stopwatch = () => {
 
 
   return(
-       <View>
+       <View style={KjøringStyles.stopwatch}>
            <Text>
                {calcedTime?
                 calcedTime

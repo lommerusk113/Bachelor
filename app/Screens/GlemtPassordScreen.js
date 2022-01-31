@@ -1,7 +1,8 @@
 import { auth } from '../config/firebase';
 import React, {useState} from 'react'
 import styles from "../Styles/Styles"
-import {  StyleSheet,Text, Button, View, Modal, Alert, TextInput, SafeAreaView, TouchableOpacity, Touchable, Image, Pressable} from 'react-native';
+import InnloggingStyles from '../Styles/InnloggingStyles';
+import {  TouchableWithoutFeedback, Keyboard, StyleSheet,Text, Button, View, Modal, Alert, TextInput, SafeAreaView, TouchableOpacity, Touchable, Image, Pressable} from 'react-native';
 
 const GlemtPassordScreen = ({ navigation }) => {
         //E-POST FOR GLEMT BRUKER
@@ -25,27 +26,31 @@ const GlemtPassordScreen = ({ navigation }) => {
     }
 
     return (
+        <TouchableWithoutFeedback onPress={()=> {Keyboard.dismiss()}}>
         <SafeAreaView style={styles.container}>
             {/* LOGO */}
-            <Image style={styles.logo} source={require("../Images/logo.png")}/>
+            <View style={styles.logoContainer}>
+                    <Image style={styles.logo} source={require("../Images/logo.png")}/>
+            </View>
 
             {/* HEADER */}
             <Text style={styles.header}>Glemt Passord</Text>
 
             {/* INPUT FELT FOR GLEMT PASSORD */}
-            <View style={styles.inputContainer}>
+            <View style={InnloggingStyles.inputContainer}>
                 <Text>E-post</Text>
-                <TextInput onChangeText={(glemt) => {setEpost(glemt)}} style={styles.input} placeholder={"E-post"}/>
+                <TextInput onChangeText={(glemt) => {setEpost(glemt)}} style={InnloggingStyles.input} placeholder={"E-post"}/>
             </View>
 
             {/* BEKREFT GLEMT PASSORD */}
-            <View style={styles.buttonContainer}>
-                <Pressable onPress={handleGlemt} style={[styles.button, styles.buttonOutline]}>
-                    <Text style={styles.buttonOutlineText}>Bekreft!</Text>
+            <View style={InnloggingStyles.buttonContainer}>
+                <Pressable onPress={handleGlemt} style={[InnloggingStyles.button, InnloggingStyles.buttonOutline]}>
+                    <Text style={InnloggingStyles.buttonOutlineText}>Bekreft!</Text>
                 </Pressable>
             </View>
 
         </SafeAreaView>
+        </TouchableWithoutFeedback>
     )
 }
 

@@ -1,36 +1,64 @@
 import React, {useState, useEffect} from 'react'
 import { Button, View, Text, SafeAreaView, TouchableOpacity, Image, ScrollView, Pressable, useColorScheme} from 'react-native';
-import { fetchDb } from '../config/firebasedb';
+// import { fetchDb } from '../config/firebasedb';
 import { auth } from '../config/firebase';
-import { getFirestore, collection, getDocs, addDoc, query, where, onSnapshot} from "firebase/firestore"
+import { getFirestore, collection, query, where, onSnapshot, orderBy} from "firebase/firestore"
+
+
 
 import { Picker } from "@react-native-picker/picker";
 
-
-//import { Dropdown } from 'react-native-element-dropdown';
-
+import { useFocusEffect } from '@react-navigation/native';
 // REACT NATIVE MAPS | EXPO-PERMISSIONS | EXPO-LOCATION
 
 import styles from "../Styles/Styles"
+import HistorikkStyles from '../Styles/HistorikkStyles';
 
 const Historikk = ({ navigation }) => {
-    const [data, setData] = useState();
+
     const [time, setTime] = useState();
 
+    const [data, setData] = useState();
     const [selected, setSelected] = useState('newest');
-
-    const [sorting, setSorting] = useState(false)
 
     const user = auth.currentUser.email
 
 
 
-
-    // FETCH DATA FROM FIREBASE
+  // FETCH DATA FROM FIREBASE
     useEffect (async () => {
+        //setSorting(false)
+        let felt = "time"
+        let order = "desc"
+        switch(selected){
+            case "newest":
+                felt = "time"
+                order = "desc"
+                break;
+            case "oldest":
+                felt = "time"
+                order = "asc"
+                break;
+            case "longest":
+                felt = "duration"
+                order = "desc"
+                break;
+            case "shortest":
+                felt = "duration"
+                order = "asc"
+                break;
+            case "longDist":
+                felt = "distance"
+                order = "desc"
+                break;
+            case "shortDist":
+                felt = "distance"
+                order = "asc"
+                break;
+        }
         try {
             const fetchDb = async (user) => {
-                const q = query(collection(getFirestore(), "Kjøreturer"), where("name", "==", user))
+                const q = query(collection(getFirestore(), "Kjøreturer"), where("name", "==", user), orderBy(felt, order))
                 onSnapshot(q, (snapshot) => {
                     let turer = []
                     snapshot.docs.forEach((doc) => {
@@ -38,6 +66,7 @@ const Historikk = ({ navigation }) => {
                     })
                     setData(turer)
                 })
+
             }
             fetchDb(user)
 
@@ -46,7 +75,9 @@ const Historikk = ({ navigation }) => {
             console.log(error)
         }
 
-    }, [])
+    }, [selected])
+
+
 
     useEffect (() => {
         //Behandle Tid:
@@ -68,44 +99,16 @@ const Historikk = ({ navigation }) => {
         }
         }
         handleDuration()
+
    },[data])
 
-   useEffect (() => {
-       if (data){
 
-        setSorting(false)
-        switch(selected){
-            case "newest":
-                data.sort((a, b) => (a.time > b.time) ? 1 : -1)
-                setSorting(true)
-                break;
-            case "oldest":
-                data.sort((a, b) => (a.time < b.time) ? 1 : -1)
-                setSorting(true)
-                break;
-            case "longest":
-                data.sort((a, b) => (a.duration < b.duration) ? 1 : -1)
-                setSorting(true)
-                break;
-            case "shortest":
-                data.sort((a, b) => (a.duration > b.duration) ? 1 : -1)
-                setSorting(true)
-                break;
-            case "longDist":
-                data.sort((a, b) => (a.distance > b.distance) ? 1 : -1)
-                setSorting(true)
-                break;
-            case "shortDist":
-                data.sort((a, b) => (a.distance < b.distance) ? 1 : -1)
-                setSorting(true)
-                break;
 
-        }
-    }
 
-   },[selected, data])
 
-    if (!time || !sorting ){
+
+
+    if (!time){
         return(<Text>Loading...</Text>)
     }else{
 
@@ -113,14 +116,14 @@ const Historikk = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             {/* LOGO */}
-            <Image style={[styles.logo, {marginTop: 20}]} source={require("../Images/logo.png")}/>
+            <Image style={styles.logo} source={require("../Images/logo.png")}/>
             <Text style={styles.header}>Dine Kjøreturer</Text>
-            <View style={styles.pickerContainer}>
+            <View style={HistorikkStyles.pickerContainer}>
                 <Picker
                     selectedValue={selected}
                     onValueChange={(value, index) => setSelected(value)}
                     mode="dropdown" // Android only
-                    style={[styles.picker]}
+                    style={[HistorikkStyles.picker]}
                 >
                     <Picker.Item label= "Nyeste Først" value= "newest" />
                     <Picker.Item label="Eldste Først" value= "oldest"/>
@@ -131,21 +134,21 @@ const Historikk = ({ navigation }) => {
                 </Picker>
             </View>
 
-            <ScrollView style={styles.turWrapper}>
-                <View style={styles.turContainer}>
+            <ScrollView style={HistorikkStyles.turWrapper}>
+                <View style={HistorikkStyles.turContainer}>
                     {data?.map(function(data, index){
                         return(
-                            <Pressable key={index} style={[styles.historikkDisplay, {marginBottom: 5}]} onPress={ () => {navigation.navigate("HistorikkUnderside",
+                            <Pressable key={index} style={HistorikkStyles.historikkDisplay} onPress={ () => {navigation.navigate("HistorikkUnderside",
                             {
                                 email: data.name, duration: time[index], distance: data.distance, title: data.tittel, id: data.id, data: data
                             })}}>
-                                <Text style={{marginBottom: 20}}>{data.title? data.title : data.name}</Text>
-                                <View style={styles.flexContainer}>
-                                    <Text style={{marginRight: 80}}>Kl. {data.clock}</Text>
+                                <Text style={HistorikkStyles.historikkTitle}>{data.title? data.title : data.name}</Text>
+                                <View style={HistorikkStyles.flexContainer}>
+                                    <Text style={HistorikkStyles.leftFlexItem}>Kl. {data.clock}</Text>
                                     <Text>{data.date}</Text>
                                 </View>
-                                <View style={styles.flexContainer}>
-                                    <Text style={{marginRight: 80}}>{data.distance} Km</Text>
+                                <View style={HistorikkStyles.flexContainer}>
+                                    <Text style={HistorikkStyles.leftFlexItem}>{data.distance} Km</Text>
                                     <Text>{time? time[index] : null}</Text>
                                 </View>
 
