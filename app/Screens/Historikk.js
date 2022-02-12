@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { Button, View, Text, SafeAreaView, TouchableOpacity, Image, ScrollView, Pressable, useColorScheme} from 'react-native';
 import { fetchDb } from '../config/firebasedb';
 import { auth } from '../config/firebase';
-import { getFirestore, collection, getDocs, addDoc, query, where, onSnapshot} from "firebase/firestore"
+import { getFirestore, collection, getDocs, addDoc, query, where, onSnapshot, orderBy} from "firebase/firestore"
 
 import { Picker } from "@react-native-picker/picker";
 
@@ -28,9 +28,44 @@ const Historikk = ({ navigation }) => {
 
     // FETCH DATA FROM FIREBASE
     useEffect (async () => {
+        //setSorting(false)
+        let felt
+        let order
+        switch(selected){
+            case "newest":
+                felt = "time"
+                order = "desc"
+                console.log('newest')
+                break;
+            case "oldest":
+                felt = "time"
+                order = "asc"
+                console.log('oldest')
+                break;
+            case "longest":
+                felt = "duration"
+                order = "desc"
+                console.log('longest')
+                break;
+            case "shortest":
+                felt = "duration"
+                order = "asc"
+                console.log('shortest')           
+                break;
+            case "longDist":
+                felt = "distance"
+                order = "desc"
+                console.log('longDist')  
+                break;
+            case "shortDist":
+                felt = "distance"
+                order = "asc"
+                console.log('shortDist')
+                break;
+        }
         try {
             const fetchDb = async (user) => {
-                const q = query(collection(getFirestore(), "Kjøreturer"), where("name", "==", user))
+                const q = query(collection(getFirestore(), "Kjøreturer"), where("name", "==", user), orderBy(felt, order))
                 onSnapshot(q, (snapshot) => {
                     let turer = []
                     snapshot.docs.forEach((doc) => {
@@ -40,13 +75,13 @@ const Historikk = ({ navigation }) => {
                 })
             }
             fetchDb(user)
-
+            
 
         } catch (error) {
             console.log(error)
         }
 
-    }, [])
+    }, [selected])
 
     useEffect (() => {
         //Behandle Tid:
@@ -69,10 +104,9 @@ const Historikk = ({ navigation }) => {
         }
         handleDuration()
    },[data])
-
+  /*     
    useEffect (() => {
        if (data){
-
         setSorting(false)
         switch(selected){
             case "newest":
@@ -82,6 +116,7 @@ const Historikk = ({ navigation }) => {
             case "oldest":
                 data.sort((a, b) => (a.time < b.time) ? 1 : -1)
                 setSorting(true)
+                //console.log(a.time)
                 break;
             case "longest":
                 data.sort((a, b) => (a.duration < b.duration) ? 1 : -1)
@@ -99,13 +134,11 @@ const Historikk = ({ navigation }) => {
                 data.sort((a, b) => (a.distance < b.distance) ? 1 : -1)
                 setSorting(true)
                 break;
-
         }
     }
-
    },[selected, data])
-
-    if (!time || !sorting ){
+   */
+    if (!time){
         return(<Text>Loading...</Text>)
     }else{
 
