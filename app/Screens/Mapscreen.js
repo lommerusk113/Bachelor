@@ -15,14 +15,14 @@ const Mapscreen = ({navigation,  route: {params}}) => {
             <MapView
                 style={{height: "100%"}}
                 initialRegion={{
-                    latitude: params.coords[0].coords.latitude,
-                    longitude: params.coords[0].coords.longitude,
+                    latitude: params.coords[0].latitude,
+                    longitude: params.coords[0].longitude,
                     latitudeDelta: latDelt,
                     longitudeDelta: longDelt
                 }}>
                  <Polyline
                         coordinates={params.coords.map((value, index) => {
-                            return {latitude: value.coords.latitude, longitude: value.coords.longitude}
+                            return {latitude: value.latitude, longitude: value.longitude}
                         })}
                         strokeColor="#000"
                         strokeColors={[
@@ -35,13 +35,6 @@ const Mapscreen = ({navigation,  route: {params}}) => {
                         ]}
                         strokeWidth={6}
                 />
-                {params.coords.map((value, index) => {
-                            return (
-                                <MapView.Marker key={index}
-                                    coordinate={{latitude: value.coords.latitude, longitude: value.coords.longitude}}
-                                    title={index.toString()}
-                                />
-                        )})}
             </MapView>
         </View>);
 };

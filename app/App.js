@@ -14,60 +14,23 @@ import Kjøring from "./Screens/Kjøring";
 import Historikk from "./Screens/Historikk";
 import HistorikkUnderside from "./Screens/HistorikkUnderside";
 import Mapscreen from './Screens/Mapscreen';
+import Instillinger from './Screens/Instillinger';
 
 export default function App({ navigation }) {
   const Stack = createNativeStackNavigator();
 
-    const [initializing, setInitializing] = useState(true);
-    const [user, setUser] = useState();
-
-
-
-
-    function handleAuthStateChanged(user) {
-      console.log(`handleAuth: user is ${user}`);
-      if (user){
-        setUser(user);
-      }
-
-      if (initializing) setInitializing(false);
-    }
-
-    useEffect(() => {
-      const subscriber = auth.onAuthStateChanged(handleAuthStateChanged);
-      return subscriber;
-    }, []);
-
-    if (initializing) return (<Text>loading...</Text>);
-    let loggedin
-    if (!user){
-      console.log("not logged in");
-    }else{
-      console.log("logged in");
-    }
-
-
-
-
   return (
       <NavigationContainer>
         <Stack.Navigator>
-          {!user?
-            <Stack.Screen name="Login" options = {{title: "Innlogging", headerShown: false}} component={Loginscreen} />
-          :
-          <>
-            <Stack.Screen name="Home" options={{ title: 'Hjem', headerShown: false}} component={HomeScreen}/>
-            <Stack.Screen name="Login" options = {{title: "Innlogging", headerShown: false}} component={Loginscreen} />
-          </>
-
-          }
-
+          <Stack.Screen name="Login" options = {{title: "Innlogging", headerShown: false}} component={Loginscreen} />
+          <Stack.Screen name="Home" options={{ title: 'Hjem', headerShown: false}} component={HomeScreen}/>
           <Stack.Screen name="Glemt Passord" option = {{title: "Glemt Passord"}} component={GlemtPassordScreen} />
           <Stack.Screen name="Registrering" option = {{title: "Registrering"}} component={SignupScreen} />
           <Stack.Screen name="Kjøring" options={{ title: 'Kjøring'}} component={Kjøring}/>
-          <Stack.Screen name="Historikk" options={{ title: 'Historikk'}} component={Historikk}/>
+          <Stack.Screen name="Historikk" options={{ title: 'Dine Kjøreturer'}} component={Historikk}/>
           <Stack.Screen name="HistorikkUnderside" options={{ title: 'Din Kjøretur'}} component={HistorikkUnderside}/>
           <Stack.Screen name="Mapscreen"  options={({ route }) => ({ title: route.params.title })} component={Mapscreen}/>
+          <Stack.Screen name="Instillinger" options={{ title: 'Instillinger'}} component={Instillinger}/>
         </Stack.Navigator>
       </NavigationContainer>
   );

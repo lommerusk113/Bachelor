@@ -32,10 +32,6 @@ const HistorikkUnderside = ({navigation,  route: {params}}) => {
                 {
                     // DERSOM BRUKEREN IKKE VIL SLETTE
                     text: 'Nei',
-                    onPress: () => {
-                        Alert.alert('','Kjøreturen ble ikke slettet!',)
-
-                    },
                     style: 'cancel',
                 },
                 // DERSOM BRUKER VIL SLETTE
@@ -55,16 +51,7 @@ const HistorikkUnderside = ({navigation,  route: {params}}) => {
   return(
         <TouchableWithoutFeedback onPress={()=> {Keyboard.dismiss()}}>
         <View style={styles.container}>
-            {logo?
-            <View>
-            {/* BARE VIS LOGO DERSOM ENDRE TITTEL FELTET IKKE ER ONFOCUS */}
-            {/* LOGO */}
-                <Image style={styles.logo} source={require("../Images/logo.png")}/>
-                {/* HEADER */}
-            <Text style={[styles.header]}>Din Kjøretur</Text>
-           </View>
-           : null
-            }
+        <Text style={[HistorikkUnderStyles.underSideKategori, HistorikkUnderStyles.lokasjonSpacing]}>{params.data.date}</Text>
             {/* ENDRE TITTEL */}
            <KeyboardAvoidingView style={HistorikkUnderStyles.underSideKatContainer}>
                <Text style={HistorikkUnderStyles.underSideKategori}>Tittel</Text>
@@ -78,16 +65,17 @@ const HistorikkUnderside = ({navigation,  route: {params}}) => {
 
 
                   {/* KATEGORIER  */}
-               <Text style={HistorikkUnderStyles.underSideKategori}>Avstand: {params.distance} km</Text>
-               <Text style={HistorikkUnderStyles.underSideKategori}>Tidsbruk: {params.duration}</Text>
-               <Text style={HistorikkUnderStyles.underSideKategori}>Klokkeslett: {params.data.clock}</Text>
-               <Text style={HistorikkUnderStyles.underSideKategori}>Dato: {params.data.date}</Text>
-           </KeyboardAvoidingView>
+                <View style={HistorikkStyles.flexContainer}>
+                    <Text style={[HistorikkUnderStyles.underSideKategori, HistorikkStyles.leftFlexItem]}>{params.distance} km</Text>
+                    <Text style={[HistorikkUnderStyles.underSideKategori, HistorikkStyles.leftFlexItem]}>{params.duration}</Text>
+                    <Text style={[HistorikkUnderStyles.underSideKategori]}>{params.data.clock}</Text>
+                </View>
 
+               <Text style={[HistorikkUnderStyles.lokasjonKategori, HistorikkUnderStyles.lokasjonSpacing]}>Fra: {params.data.startsted}</Text>
+               <Text style={HistorikkUnderStyles.lokasjonKategori}>Til: {params.data.sluttsted}</Text>
 
-           {/* BUNNKNAPPER */}
-            <View style={[InnloggingStyles.buttonContainer, HistorikkUnderStyles.buttonContainer]}>
-                <View style={[HistorikkStyles.flexContainer]}>
+                {/* BUNNKNAPPER */}
+
 
                     {/* SE I KART */}
                     <Pressable
@@ -101,8 +89,7 @@ const HistorikkUnderside = ({navigation,  route: {params}}) => {
                     <Pressable onPress={handleDelete} style={[InnloggingStyles.button, InnloggingStyles.buttonOutline, HistorikkUnderStyles.redButton]}>
                         <Text style={[InnloggingStyles.buttonOutlineText, HistorikkUnderStyles.buttonText]}>Slett Tur</Text>
                     </Pressable>
-                </View>
-            </View>
+           </KeyboardAvoidingView>
         </View>
         </TouchableWithoutFeedback>
 

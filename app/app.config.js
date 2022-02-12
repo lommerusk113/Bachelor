@@ -2,7 +2,7 @@ import 'dotenv/config';
 export default
 {
     "expo": {
-      "name": "firebaseauth",
+      "name": "Bachelor Kjørebok App",
       "slug": "Bachelor",
       "version": "1.0.0",
       "orientation": "portrait",
@@ -19,13 +19,23 @@ export default
         '**/*'
       ],
       "ios": {
-        "supportsTablet": true
+        "supportsTablet": true,
+        "infoPlist":{
+          "UIBackggroundModes": [
+            "location",
+            "fetch"
+          ]
+        }
       },
       "android": {
+        "package":"ekbok.kjoreBok",
         "adaptiveIcon": {
           "foregroundImage": "./assets/adaptive-icon.png",
           "backgroundColor": "#FFFFFF"
-        }
+        },
+        "permissions": [
+          "ACCESS_BACKGROUND_LOCATION"
+        ]
       },
       "web": {
         "favicon": "./assets/favicon.png"
@@ -36,7 +46,8 @@ export default
         projectId: process.env.PROJECT_ID,
         storageBucket: process.env.STORAGE_BUCKET,
         messagingSenderId: process.env.MESSAGING_SENDER_ID,
-        appId: process.env.APP_ID
+        appId: process.env.APP_ID,
+        googleApiKey: process.env.GOOGLE_API_KEY
       }
     }
   }

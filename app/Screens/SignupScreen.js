@@ -1,15 +1,20 @@
 import React, {useState} from 'react'
-import { TouchableWithoutFeedback, Keyboard, Text, View, TextInput, SafeAreaView, Image, Pressable, Dimensions} from 'react-native';
+import {TouchableWithoutFeedback, Keyboard, Text, View, TextInput, SafeAreaView, Image, Pressable, Dimensions} from 'react-native';
 import { auth } from '../config/firebase';
 import { handleSignup  } from "../Funksjoner/signupFunksjon"
 import styles from "../Styles/Styles"
 import InnloggingStyles from '../Styles/InnloggingStyles';
+import {
+    RoundedCheckbox,
+    PureRoundedCheckbox,
+  } from "react-native-rounded-checkbox";
 
 const SignupScreen = ({ navigation }) => {
     //USER INPUT
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [bekreftSignupPassword, setBekreftSignupPassword] = useState();
+    const [boxChecked, setBoxChecked] = useState(false);
 
     // REGISTRER
     const onHandleSignup = async () => {
@@ -25,7 +30,6 @@ const SignupScreen = ({ navigation }) => {
                 <Image style={styles.logo} source={require("../Images/logo.png")}/>
 
                 {/* SKJEMA FOR REGISTRERING */}
-                <Text style={styles.header}>Registrer</Text>
                 <View style={InnloggingStyles.inputContainer}>
                     <Text>E-post</Text>
                     <TextInput onChangeText={(username) => {setEmail(username)}} style={InnloggingStyles.input} placeholder={"E-post"} value={email}/>
@@ -34,6 +38,18 @@ const SignupScreen = ({ navigation }) => {
                     <Text>Gjenta Passord</Text>
                     <TextInput onChangeText={(password) => {setBekreftSignupPassword(password)}}
                         style={InnloggingStyles.input} secureTextEntry value={bekreftSignupPassword} placeholder={"Gjenta Passord"}/>
+                    <View style={InnloggingStyles.flexCheckBox}>
+                        <PureRoundedCheckbox
+                            onPress={(checked) => setBoxChecked(checked)}
+                            innerStyle={InnloggingStyles.checkBox}
+                            text = {""}
+                            checkedColor = {"black"}
+                            outerStyle = {InnloggingStyles.checkBox}
+                        />
+                        <Text style={InnloggingStyles.checkBoxText}>Jeg er enig med </Text>
+                        <Text onPress={() => {console.log("Pressed")}} style={InnloggingStyles.checkBoxTextClickable}>Bruksvilkårene</Text>
+                    </View>
+
                 </View>
 
                 {/* BEKREFT REGISTRERING */}

@@ -2,27 +2,37 @@ import {  StyleSheet, Dimensions} from 'react-native';
 
 const {width, height} = Dimensions.get("window")
 
-let buttonHeight = "30%"
-let imageWidth = "65%"
-let imageHeight = "65%"
+let buttonHeight = "27%"
+let imageWidth = "35%"
+let imageHeight = "50%"
 
 if (height < 704){
     buttonHeight = "25%"
-    imageWidth = "40%"
+    imageWidth = "30%"
     imageHeight = "65%"
 }
 
 
 const HomeStyles = StyleSheet.create({
+
+    //BUTTON CONTAINEr
+    kategoriContainer: {
+        width: "70%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
     //NAVIGASJONSKNAPP
     kategoriButton: {
-        borderWidth: 1,
+        borderWidth: 3,
         justifyContent: "center",
         alignItems: "center",
         width: "100%",
         height: buttonHeight,
-        borderRadius: 12,
+        borderRadius: 15,
         marginBottom:20,
+
+
+
     },
 
     //BILDE I NAVIGASJONSKNAPP
@@ -30,6 +40,21 @@ const HomeStyles = StyleSheet.create({
         width: imageWidth,
         height: imageHeight,
     },
+    buttonText: {
+       color: "black",
+       fontSize: 25,
+    },
+
+    instillingerContainer: {
+        borderRadius: 15,
+        borderWidth: 1,
+        height: 50,
+        width: 120,
+        alignItems: "center",
+        justifyContent: "center",
+        marginBottom: 20,
+        backgroundColor: 'rgb(7, 130, 249)',
+    }
 })
 
 export default HomeStyles

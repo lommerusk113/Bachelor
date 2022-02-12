@@ -10,7 +10,21 @@ const HistorikkUnderStyles = StyleSheet.create({
 
     //KATEGORIER
     underSideKategori: {
+        marginTop: 15,
+        fontWeight: "bold",
+        fontSize: 15,
+
+    },
+
+    //SPACING
+    lokasjonSpacing: {
+        marginTop: "10%",
+    },
+
+    // FRA -> TIL
+    lokasjonKategori: {
         marginTop: 10,
+        fontSize: 20,
     },
 
     //TITTEL INPUT
@@ -40,23 +54,21 @@ const HistorikkUnderStyles = StyleSheet.create({
         borderRadius: 9,
     },
 
-    //BUTTON CONTAINER
-    buttonContainer: {
-        marginBottom: 0,
-    },
 
     //SE I KART KNAPP
     greenButton: {
+        marginTop: "10%",
         width:200,
-        backgroundColor: "rgb(85, 175, 130)",
-        borderRadius: 0,
+        backgroundColor: "rgb(165, 255, 221)",
+        borderRadius: 15,
     },
 
     //SLETT TUR KNAPP
     redButton: {
+        marginTop: 10,
         width:200,
-        backgroundColor: "rgb(225, 100,100)",
-        borderRadius: 0,
+        backgroundColor: "rgb(255, 201,216)",
+        borderRadius: 15,
     },
 
     //TEKST INNI KNAPPER

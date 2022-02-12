@@ -115,9 +115,6 @@ const Historikk = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            {/* LOGO */}
-            <Image style={styles.logo} source={require("../Images/logo.png")}/>
-            <Text style={styles.header}>Dine Kjøreturer</Text>
             <View style={HistorikkStyles.pickerContainer}>
                 <Picker
                     selectedValue={selected}
@@ -142,16 +139,17 @@ const Historikk = ({ navigation }) => {
                             {
                                 email: data.name, duration: time[index], distance: data.distance, title: data.tittel, id: data.id, data: data
                             })}}>
-                                <Text style={HistorikkStyles.historikkTitle}>{data.title? data.title : data.name}</Text>
-                                <View style={HistorikkStyles.flexContainer}>
-                                    <Text style={HistorikkStyles.leftFlexItem}>Kl. {data.clock}</Text>
-                                    <Text>{data.date}</Text>
+                                <View>
+                                    <Text style={HistorikkStyles.historikkTitle}>{data.title? data.title : data.name}</Text>
+                                    <Text>{data.startsted}</Text>
+                                    <Text>{data.sluttsted}</Text>
+                                    <Text style={[HistorikkStyles.clockDisplay, HistorikkStyles.flexItem]}>{data.clock}</Text>
+                                    <View style={HistorikkStyles.flexContainer}>
+                                        <Text style={[HistorikkStyles.leftFlexItem, HistorikkStyles.flexItem]}>{data.distance} Km</Text>
+                                        <Text style={[HistorikkStyles.leftFlexItem, HistorikkStyles.flexItem]}>{time? time[index] : null}</Text>
+                                        <Text style={[HistorikkStyles.flexItem]}>{data.date}</Text>
+                                    </View>
                                 </View>
-                                <View style={HistorikkStyles.flexContainer}>
-                                    <Text style={HistorikkStyles.leftFlexItem}>{data.distance} Km</Text>
-                                    <Text>{time? time[index] : null}</Text>
-                                </View>
-
                             </Pressable>
                         )
                     })}

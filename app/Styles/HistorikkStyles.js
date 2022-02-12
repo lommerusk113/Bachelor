@@ -38,7 +38,14 @@ const HistorikkStyles = StyleSheet.create({
 
     //TITTEL FOR KJØRETUR
     historikkTitle: {
+        fontWeight: "bold",
         marginBottom: 20,
+        fontSize: 20,
+    },
+
+    //CLOCKDISPKLAY
+    clockDisplay: {
+        marginLeft: "80%",
     },
 
     //FLEXBOX CONTAINER
@@ -47,9 +54,15 @@ const HistorikkStyles = StyleSheet.create({
         flexDirection: "row",
     },
 
+    // FLEXITEM
+    flexItem: {
+        fontWeight: "bold",
+        marginTop: 5,
+    },
+
     //AVSTAND MELLOM FLEXBOX ITEMS
     leftFlexItem: {
-        marginRight: 80,
+        marginRight: 30,
     },
 
 })

@@ -16,9 +16,10 @@ const styles = StyleSheet.create({
       //HEADER
       header: {
         fontSize: 30,
-        fontWeight: "100",
-        marginBottom: 10,
+        fontWeight: "900",
         marginTop: "1%",
+
+
       },
 });
 
