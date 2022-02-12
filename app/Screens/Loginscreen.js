@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
 import {  StyleSheet,Text, Button, View, Modal, Alert, TextInput, SafeAreaView, TouchableOpacity, Touchable, Image, Pressable} from 'react-native';
-import { auth } from '../config/firebase';
+import { auth, testApi } from '../config/firebase';
 import { handleLogin } from "../Funksjoner/loginFunksjon"
 import {handleSignup  } from "../Funksjoner/signupFunksjon"
 import styles from "../Styles/Styles"
@@ -9,7 +9,7 @@ const Loginscreen = ({ navigation }) => {
     //LOGIN INPUT
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
-
+    testApi()
 
 
 
