@@ -1,163 +1,42 @@
 import React from 'react'
-import { Button, View, Text, SafeAreaView, TouchableOpacity, Image, Pressable, Picker} from 'react-native';
+import { View, Text, SafeAreaView, TouchableOpacity, Image, Pressable} from 'react-native';
 import styles from "../Styles/Styles"
+import KjøringStyles from '../Styles/KjøringStyles';
 import {useState, useEffect} from "react";
-import {starting, handleStateChange, updateCounter} from "../Funksjoner/kjøringbutton"
 import { auth } from '../config/firebase';
 import { addDb } from "../config/firebasedb"
 import Stopwatch from "../Components/Stopwatch"
+import {starting, kjører, stopping, updateFunc} from "../Funksjoner/Kjørefunksjon"
+// import BackgroundTask from 'react-native-background-task'
 
 import * as Location from "expo-location";
 
 const Kjøring = ({ route: {params}}) => {
     // HVILKEN KNAPP SKAL VISES
-    const [start, setStart] = useState();
-    const[mounted, setMounted] = useState(false);
-
-    // TRACKING
-    const [location, setLocation] = useState(null);
-    const [errorMsg, setErrorMsg] = useState(null);
+    const [update, setUpdate] = useState();
 
 
-
-    // TO BE STORED
-    let storage =
-        {
-            name: auth.currentUser.email,
-            duration: 0,
-            distance: "",
-            coords: [],
-            title: "",
-            time: "",
-            date: "",
-            clock: "",
-            description: "",
-        }
-
-
-
-    //FOR Å STOPPE FUNKSJONEN
-    let stop = false
-
-    // VENT X ANTALL MS
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-      }
 
     //BRUKER HAR TRYKT PÅ STARTKNAPPEN
     const handleStart = async () => {
-        setStart(true)
-        handleStateChange(true)
-        console.log("Starting")
-        stop = false
-      };
+        updateFunc(true)
+        setUpdate(true)
+        kjører()
+
+    };
 
     //BRUKEN HAR TRYKKET PÅ STOPP KNAPPEN
     const handleStop = () => {
-        stop = true
-        setStart(false)
-        handleStateChange(false)
+        setUpdate(false)
+        updateFunc(false)
+        stopping()
+
     };
 
-    // ASK PERMISSION AND TRACK USER
-    const handleTracking = async () => {
-        let {status} = await Location.requestForegroundPermissionsAsync();
-        // USER DID NOT ACCEPT
-        if (status !== "granted"){
-            setErrorMsg('Permission to access location was denied');
-            return;
-        }
-        //USER HAS ACCEPTED
-        let location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.BestForNavigation});
-        setLocation(location);
-        if(location){
-            storage.coords.push(location);
-        }
-    }
 
-    //CALCULATE DISTANCE
-    const distance = () => {
-        let dist = 0
-        storage.coords.forEach((element, index) => {
-            if ((index + 1) != storage.coords.length){
-                let lat1 = element.coords.latitude
-                let lon1 = element.coords.longitude
-                let lat2 = storage.coords[index + 1].coords.latitude
-                let lon2 = storage.coords[index + 1].coords.longitude
-                dist = dist + calcDistance(lat1, lat2, lon1, lon2)
-            }
-        })
-        return  (dist).toFixed(3)
-    }
-
-    const calcDistance = (lat1, lat2, lon1, lon2) => {
-        // CALCULATE THE DATA
-
-
-        const R = 6371e3; // metres
-        const latitude1 = lat1 * Math.PI/180; // φ, λ in radians
-        const latitude2 = lat2 * Math.PI/180;
-        const deltaLatitude = (lat2-lat1) * Math.PI/180;
-        const deltaLongitude = (lon2-lon1) * Math.PI/180;
-
-        const a = Math.sin(deltaLatitude/2) * Math.sin(deltaLatitude/2) +
-                Math.cos(latitude1) * Math.cos(latitude2) *
-                Math.sin(deltaLongitude/2) * Math.sin(deltaLongitude/2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-
-        const d = (R * c) / 1000; //KM
-        return d
-    }
-
-
-    //CURRENT TIME
-    const getTime = () => {
-        let today = new Date()
-        storage.time = today;
-        storage.date = today.getDate() + "." + (today.getMonth() + 1) + "." + today.getFullYear()
-
-        let hour =  today.getUTCHours() + 1
-        let minutes = today.getMinutes();
-
-        if (hour < 10){hour = "0" + hour}
-        if (minutes < 10){minutes = "0" + minutes}
-
-        storage.clock = hour + " : " + minutes
-
-
-    }
-
-    // BYTT TIL WHILE ELLER DO WHILE
-    useEffect (async () => {
-        // PAGE HAS NOT BEEN REFRESHED AND BUTTON HAS BEEN STARTED
-        if (start && starting)
-            // WHILE BUTTON IS STARTED
-            for (let i = 0; i < Infinity; i++) {
-                // TRACK USER EVERY 10 SEC
-                updateCounter(i)
-                if (i % 2 === 0){
-                    handleTracking()
-                }
-                // USER HAS STOPPED
-                if (starting == false){
-                    // STOPPING COORDINATES
-                    handleTracking()
-                    console.log("Stopped")
-                    storage.duration = i;
-                    //CALCULATE DISTANCE
-                   storage.distance = distance();
-                   //ADD TIME
-                   getTime()
-                   //STORE TO DATABASE
-                   if(i > 10){
-                    addDb(storage)
-                   }
-                    return;
-                }
-                await sleep(1000)
-            }
-    }, [starting])
-
+    // REFRESH ON UPDATE
+    useEffect(() => {
+    }, [update])
 
     return (
         <SafeAreaView style={styles.container}>
@@ -167,23 +46,24 @@ const Kjøring = ({ route: {params}}) => {
             <View>
                 {!starting?
                     //START KNAPP
-                    <View style={styles.startContainer}>
-                        <Pressable onPress={handleStart} style={styles.startButton}>
-                            <Image style={styles.playImage} source={require("../Images/Play.png")} />
+                    <View style={KjøringStyles.startContainer}>
+                        <Pressable onPress={handleStart} style={KjøringStyles.startButton}>
+                            <Image style={KjøringStyles.playImage} source={require("../Images/Play.png")} />
                         </Pressable>
-                        <Text style={styles.startContainerText}>Start</Text>
+                        <Text style={KjøringStyles.startContainerText}>Start</Text>
                     </View>
                 :
                     //STOPP KNAPP
-                    <View style={styles.startContainer}>
-                        <Pressable onPress={handleStop} style={styles.startButton}>
-                            <Image style={styles.playImage} source={require("../Images/Stop.png")} />
+                    <View style={KjøringStyles.startContainer}>
+                        <Pressable onPress={handleStop} style={KjøringStyles.startButton}>
+                            <Image style={KjøringStyles.playImage} source={require("../Images/Stop.png")} />
                         </Pressable>
-                        <Text style={styles.startContainerText}>Stopp</Text>
+                        <Text style={KjøringStyles.startContainerText}>Stopp</Text>
                     </View>
                 }
             </View>
-            <Stopwatch/>
+            <Stopwatch style={KjøringStyles.stopwatch}/>
+
         </SafeAreaView>
     )
 }
