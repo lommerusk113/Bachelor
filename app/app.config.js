@@ -2,8 +2,8 @@ import 'dotenv/config';
 export default
 {
     "expo": {
-      "name": "Bachelor Kjørebok App",
-      "slug": "Bachelor",
+      "name": "Ekbok",
+      "slug": "Ekbok",
       "version": "1.0.0",
       "orientation": "portrait",
       "icon": "./assets/icon.png",

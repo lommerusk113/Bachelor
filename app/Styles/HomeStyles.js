@@ -8,8 +8,8 @@ let imageHeight = "50%"
 
 if (height < 704){
     buttonHeight = "25%"
-    imageWidth = "30%"
-    imageHeight = "65%"
+    imageWidth = "25%"
+    imageHeight = "45%"
 }
 
 

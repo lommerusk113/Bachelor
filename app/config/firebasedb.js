@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app"
 import { getFirestore, collection, getDocs, addDoc, query, where, onSnapshot, updateDoc, doc, setDoc, deleteDoc} from "firebase/firestore"
-import { ImageBackgroundBase } from "react-native";
 import Constants from 'expo-constants';
 
 
@@ -23,10 +22,12 @@ const colRef = collection(db, "Kjøreturer")
 
 
 // ADD KJØRETUR TO DB
-const addDb = async (data) => {
+const addDb = async (data, enableButton) => {
     addDoc(colRef, data)
-    .then(() => {
-        // DO SOMETHING
+    .then((response) => {
+        enableButton()
+    }).catch((error) => {
+        enableButton()
     })
 }
 

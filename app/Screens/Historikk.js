@@ -3,6 +3,7 @@ import { Button, View, Text, SafeAreaView, TouchableOpacity, Image, ScrollView, 
 // import { fetchDb } from '../config/firebasedb';
 import { auth } from '../config/firebase';
 import { getFirestore, collection, query, where, onSnapshot, orderBy} from "firebase/firestore"
+import * as Location from "expo-location";
 
 
 
@@ -99,17 +100,11 @@ const Historikk = ({ navigation }) => {
         }
         }
         handleDuration()
-
    },[data])
 
 
-
-
-
-
-
     if (!time){
-        return(<Text>Loading...</Text>)
+        return(<Text>Laster inn...</Text>)
     }else{
 
 
@@ -141,11 +136,27 @@ const Historikk = ({ navigation }) => {
                             })}}>
                                 <View>
                                     <Text style={HistorikkStyles.historikkTitle}>{data.title? data.title : data.name}</Text>
-                                    <Text>{data.startsted}</Text>
-                                    <Text>{data.sluttsted}</Text>
-                                    <Text style={[HistorikkStyles.clockDisplay, HistorikkStyles.flexItem]}>{data.clock}</Text>
                                     <View style={HistorikkStyles.flexContainer}>
-                                        <Text style={[HistorikkStyles.leftFlexItem, HistorikkStyles.flexItem]}>{data.distance} Km</Text>
+                                        <Text style={[HistorikkStyles.clockDisplay, HistorikkStyles.flexItem]}>{data.clockStart? data.clockStart: "00 : 00"}</Text>
+                                        <Text style={HistorikkStyles.sted}>
+                                            {data.startsted[0].streetNumber? data.startsted[0].streetNumber + ", " : null}
+                                            {data.startsted[0].street? data.startsted[0].street + ", ": data.startsted[0].name  + ", "}
+                                            {data.startsted[0].subregion? data.startsted[0].subregion: data.startsted[0].city  + ", "}
+                                        </Text>
+                                    </View>
+                                    <View style={HistorikkStyles.flexContainer}>
+                                        <Text style={[HistorikkStyles.clockDisplay, HistorikkStyles.flexItem]}>{data.clockEnd? data.clockEnd: data.clock}</Text>
+                                        <Text style={HistorikkStyles.sted}>
+                                            {data.sluttsted[0].streetNumber? data.sluttsted[0].streetNumber + ", ": null}
+                                            {data.sluttsted[0].street? data.sluttsted[0].street + ", ": data.sluttsted[0].name  + ", "}
+                                            {data.sluttsted[0].subregion? data.sluttsted[0].subregion + ", ": data.sluttsted[0].city}
+                                        </Text>
+                                    </View>
+
+
+
+                                    <View style={HistorikkStyles.flexContainer}>
+                                        <Text style={[HistorikkStyles.leftFlexItem, HistorikkStyles.flexItem]}>{Math.round(data.distance * 10) / 10} Km</Text>
                                         <Text style={[HistorikkStyles.leftFlexItem, HistorikkStyles.flexItem]}>{time? time[index] : null}</Text>
                                         <Text style={[HistorikkStyles.flexItem]}>{data.date}</Text>
                                     </View>

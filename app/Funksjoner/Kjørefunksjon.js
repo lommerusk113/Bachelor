@@ -3,6 +3,7 @@ import { auth } from '../config/firebase';
 import * as Location from "expo-location";
 
 import * as TaskManager from 'expo-task-manager';
+import { Alert} from 'react-native';
 
 const TASK_NAME = 'background-location-task';
 
@@ -12,7 +13,7 @@ let counter = 0
 
 // PARAMETERS
 const minTimeStorage = 10
-const trackEverySec = 2
+const trackEverySec = 5
 
  // TO BE STORED
  let storage =
@@ -24,7 +25,8 @@ const trackEverySec = 2
      title: "",
      time: "",
      date: "",
-     clock: "",
+     clockStart: "",
+     clockEnd: "",
      startsted: "",
      sluttsted: "",
  }
@@ -65,7 +67,6 @@ const handleBackgroundTracking = async () => {
             //console.log(locations)
             let c = counter = Math.floor((Date.now() - time) / 1000)
             let ltt = locations[0].coords
-            console.log(c)
             storage.coords.push(ltt)
         }
       });
@@ -74,8 +75,9 @@ const handleBackgroundTracking = async () => {
 
 
 //CURRENT TIME
-const getTime = () => {
+const getTime = (status) => {
     let today = new Date()
+    console.log(status)
 
     storage.time = today;
 
@@ -93,7 +95,11 @@ const getTime = () => {
     if (hour < 10){hour = "0" + hour}
     if (minutes < 10){minutes = "0" + minutes}
 
-    storage.clock = hour + " : " + minutes
+    if (status == "start") {
+        storage.clockStart = hour + " : " + minutes
+    }else if (status == "end"){
+        storage.clockEnd = hour + " : " + minutes
+    }
 }
 
 
@@ -143,63 +149,72 @@ const reverseGeolocation = async (pos) => {
             latitude,
             longitude
         });
-        for (let item of response) {
-            let address = `${item.street}, ${item.subregion}`;
-            if (pos == "start"){
-                storage.startsted = address
-            }
-            if(pos == "slutt"){
-                storage.sluttsted = address
-            }
+        if (pos == "start"){
+            storage.startsted = response
+        }
+        if(pos == "slutt"){
+            storage.sluttsted = response
         }
     }
+}
+
+const geoStart = async () => {
+        const latitude = storage.coords[0].latitude
+        const longitude = storage.coords[0].longitude
+
+        let response = await Location.reverseGeocodeAsync({
+            latitude,
+            longitude
+        });
+        storage.startsted = response
 }
 
 const populateStorage = (timer) => {
     storage.name = auth.currentUser.email
     storage.distance = distance();
     storage.duration = timer;
-
 }
 
 const kjører = async () => {
-    // ADD ALERT TO EXPLAIN TO USER!
-    let {status} = await Location.requestBackgroundPermissionsAsync();
-    // USER DID NOT ACCEPT
-    if (status !== "granted"){
-        setErrorMsg('Permission to access location was denied');
-        stopping()
-        return;
-    }else{
-        reverseGeolocation("start")
-        handleTracking()
-        time = Date.now()
-        handleBackgroundTracking()
-    }
+    counter = 0
+    storage.coords = []
+    storage.startsted = ""
+    storage.sluttsted = ""
+    //reverseGeolocation("start")
+    handleTracking()
+    time = Date.now()
+    getTime("start")
+    handleBackgroundTracking()
 }
 
-const stopping = () => {
-
-    Location.stopLocationUpdatesAsync("firstTask")
-    Promise.all([
-        reverseGeolocation("slutt"),
-        handleTracking(),
-        populateStorage(counter),
-        getTime()
-    ]).then(() => {
+const stopping = (enableButton) => {
+    try {
+        Location.stopLocationUpdatesAsync("firstTask")
+        counter = Math.floor((Date.now() - time) / 1000)
         if (counter > minTimeStorage){
-            addDb(storage)
+            Promise.all([
+                geoStart(),
+                reverseGeolocation("slutt"),
+                handleTracking(),
+                populateStorage(counter),
+                getTime("end")
+            ]).then(() => {
+                addDb(storage, enableButton)
+            }).catch(err => {
+                console.log(err)
+                addDb(storage, enableButton)
+            })
+        }else{
+            enableButton()
         }
-        counter = 0
-        storage.coords = []
-        storage.startsted = ""
-        storage.sluttsted = ""
-    })
 
-
+    } catch (error) {
+        addDb(storage, enableButton)
+    }
 
 }
 
 
 
-export { starting, kjører, stopping, updateFunc, time }
+export { starting, kjører, stopping, updateFunc, time}
+

@@ -24,6 +24,11 @@ const HistorikkStyles = StyleSheet.create({
         alignItems: "center",
     },
 
+    //STED
+    sted: {
+        marginTop: 5,
+    },
+
     //KNAPPENE SOM VISES TURER
     historikkDisplay: {
         borderWidth: 1,
@@ -45,7 +50,8 @@ const HistorikkStyles = StyleSheet.create({
 
     //CLOCKDISPKLAY
     clockDisplay: {
-        marginLeft: "80%",
+        marginLeft: "0%",
+        marginRight: "5%",
     },
 
     //FLEXBOX CONTAINER

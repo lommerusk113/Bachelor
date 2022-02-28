@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {TouchableWithoutFeedback, Keyboard, Text, View, TextInput, SafeAreaView, Image, Pressable, Dimensions} from 'react-native';
+import {TouchableWithoutFeedback, Keyboard, Text, View, TextInput, SafeAreaView, Image, Pressable, Dimensions, Alert} from 'react-native';
 import { auth } from '../config/firebase';
 import { handleSignup  } from "../Funksjoner/signupFunksjon"
 import styles from "../Styles/Styles"
@@ -18,9 +18,18 @@ const SignupScreen = ({ navigation }) => {
 
     // REGISTRER
     const onHandleSignup = async () => {
-        await handleSignup(email, password, bekreftSignupPassword, navigation);
-        setPassword("");
-        setBekreftSignupPassword("");
+        if (password == bekreftSignupPassword){
+            if (boxChecked == true){
+                await handleSignup(email, password, bekreftSignupPassword, navigation);
+                setPassword("");
+                setBekreftSignupPassword("");
+            }else{
+                Alert.alert('','Vennligst godta Bruksvilkårene.',)
+            }
+        }else{
+            Alert.alert('','Passord og gjenta passord er ikke like.',)
+        }
+
     }
 
     return (
@@ -47,7 +56,7 @@ const SignupScreen = ({ navigation }) => {
                             outerStyle = {InnloggingStyles.checkBox}
                         />
                         <Text style={InnloggingStyles.checkBoxText}>Jeg er enig med </Text>
-                        <Text onPress={() => {console.log("Pressed")}} style={InnloggingStyles.checkBoxTextClickable}>Bruksvilkårene</Text>
+                        <Text onPress={() => {navigation.navigate("Bruksvilkår")}} style={InnloggingStyles.checkBoxTextClickable}>Bruksvilkårene</Text>
                     </View>
 
                 </View>

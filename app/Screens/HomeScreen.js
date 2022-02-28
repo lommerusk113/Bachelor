@@ -5,6 +5,7 @@ import styles from "../Styles/Styles"
 import InnloggingStyles from '../Styles/InnloggingStyles';
 import HomeStyles from '../Styles/HomeStyles';
 import {starting} from "../Funksjoner/Kjørefunksjon"
+import * as SecureStore from 'expo-secure-store';
 
 const HomeScreen = ({ navigation }) => {
 
@@ -23,17 +24,22 @@ const HomeScreen = ({ navigation }) => {
                 ]
             );
         }else{
-            auth.signOut().then(function() {
+            auth.signOut().then(async function() {
                 // Sign-out successful.
-                console.log("Logged out!")
+                Promise.all([
+                    await SecureStore.deleteItemAsync("Username"),
+                    await SecureStore.deleteItemAsync("Password")
+                ]).then(() => {
+                    navigation.replace('Login')
+                })
             }, function(error) {
                 // An error happened.
             });
-            navigation.replace('Login')
+
         }
     }
-    const user = auth.currentUser
 
+    const user = auth.currentUser
 
     return (
         <SafeAreaView style={styles.container}>
@@ -45,9 +51,6 @@ const HomeScreen = ({ navigation }) => {
             {/* Instillinger */}
 
             <View style={HomeStyles.kategoriContainer}>
-                <Pressable style={HomeStyles.instillingerContainer} onPress={() => navigation.navigate('Instillinger')}>
-                    <Text style={InnloggingStyles.buttonOutlineText}>Instillinger</Text>
-                </Pressable>
                 {/* KJØRING KNAPP */}
                 <Pressable title="Kjøring" onPress={() => {navigation.navigate("Kjøring")}} style={HomeStyles.kategoriButton}>
                     <Text style={HomeStyles.buttonText}>Kjøring</Text>
@@ -59,6 +62,11 @@ const HomeScreen = ({ navigation }) => {
                     <Text style={HomeStyles.buttonText}>Historikk</Text>
                     <Image style={HomeStyles.kategoriImage} source={require("../Images/Historikk.png")} />
                 </Pressable>
+
+                <Pressable style={[InnloggingStyles.button, InnloggingStyles.buttonOutline, {marginBottom: 20}]} onPress={() => navigation.navigate('Innstillinger')}>
+                    <Text style={InnloggingStyles.buttonOutlineText}>Innstillinger</Text>
+                </Pressable>
+
 
                 {/* LOGG UT KNAPP */}
                 <Pressable title="Logg Ut" onPress={handleLogout} style={[InnloggingStyles.button, InnloggingStyles.buttonOutline]}>

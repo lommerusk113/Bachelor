@@ -18,9 +18,19 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: "900",
         marginTop: "1%",
-
-
       },
+
+      smallHeader: {
+        marginTop: 20,
+        fontSize: 20,
+        marginBottom: 5,
+      },
+
+      loader: {
+        marginTop: "100%",
+        marginLeft: "40%",
+        fontSize: 20,
+      }
 });
 
 export default styles

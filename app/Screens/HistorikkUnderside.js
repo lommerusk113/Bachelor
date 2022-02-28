@@ -68,11 +68,23 @@ const HistorikkUnderside = ({navigation,  route: {params}}) => {
                 <View style={HistorikkStyles.flexContainer}>
                     <Text style={[HistorikkUnderStyles.underSideKategori, HistorikkStyles.leftFlexItem]}>{params.distance} km</Text>
                     <Text style={[HistorikkUnderStyles.underSideKategori, HistorikkStyles.leftFlexItem]}>{params.duration}</Text>
-                    <Text style={[HistorikkUnderStyles.underSideKategori]}>{params.data.clock}</Text>
+                    <Text style={[HistorikkUnderStyles.underSideKategori]}>{params.data.clock? params.data.clock : null}</Text>
                 </View>
 
-               <Text style={[HistorikkUnderStyles.lokasjonKategori, HistorikkUnderStyles.lokasjonSpacing]}>Fra: {params.data.startsted}</Text>
-               <Text style={HistorikkUnderStyles.lokasjonKategori}>Til: {params.data.sluttsted}</Text>
+               <Text style={[HistorikkUnderStyles.lokasjonKategori, HistorikkUnderStyles.lokasjonSpacing]}>
+                   Fra:
+                        {params.data.startsted[0].streetNumber? params.data.startsted[0].streetNumber + ", " : null}
+                        {params.data.startsted[0].street? params.data.startsted[0].street + ", ": params.data.startsted[0].name  + ", "}
+                        {params.data.startsted[0].subregion? params.data.startsted[0].subregion: params.data.startsted[0].city  + ", "}
+                </Text>
+               <Text> {params.data.clockStart? "Kl: " + params.data.clockStart : null} </Text>
+               <Text style={HistorikkUnderStyles.lokasjonKategori}>
+                   Til:
+                        {params.data.sluttsted[0].streetNumber? params.data.sluttsted[0].streetNumber + ", " : null}
+                        {params.data.sluttsted[0].street? params.data.sluttsted[0].street + ", ": params.data.sluttsted[0].name  + ", "}
+                        {params.data.sluttsted[0].subregion? params.data.sluttsted[0].subregion: params.data.sluttsted[0].city  + ", "}
+                </Text>
+               <Text> {params.data.clockEnd? "Kl: " + params.data.clockEnd : null} </Text>
 
                 {/* BUNNKNAPPER */}
 

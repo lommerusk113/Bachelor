@@ -1,18 +1,19 @@
 import {  StyleSheet,Text, Button, View, Modal, Alert, TextInput, SafeAreaView, TouchableOpacity, Touchable, Image, Pressable} from 'react-native';
 import { auth } from '../config/firebase';
+import * as SecureStore from 'expo-secure-store';
+
+
+
 
 // Checks if the user has typed in a valid username and password
-const handleLogin = async ( email, password, navigation, signup) => {
+const handleLogin = async ( email, password, navigation, signup, from) => {
     console.log("Attempting login!")
     try {
       if (email !== '' && password !== '') {
        await auth.signInWithEmailAndPassword(email, password);
-       console.log("Logged in");
-       if (signup){
-            navigation.popToTop()
-       }
+       console.log("Logged in")
 
-       navigation.replace('Home')
+       return "correct"
 
 
 
@@ -31,15 +32,15 @@ const handleLogin = async ( email, password, navigation, signup) => {
             Alert.alert('','Brukernavn eller Passord er feil!',)
 
         // BRUKEREN HAR IKKE FYLT INN EPOST
-        }else if(error.message == 'signInWithEmailAndPassword failed: First argument "email" must be a valid string.'){
+        }else if(error.message == 'Firebase: Error (auth/missing-email).'){
             Alert.alert('','Vennligst fyll inn feltet for E-post',)
 
         // BRUKEREN HAR IKKE FYLT INN PASSORD
-        }else if(error.message == 'Second argument "password" must be a valid string.'){
+        }else if(error.message == 'Firebase: An internal AuthError has occurred. (auth/internal-error).'){
             Alert.alert('','Vennligst fyll inn feltet for Passord',)
 
         // DÅRLIG FORMATERT EPOST
-        }else if (error.message == "The email address is badly formatted."){
+        }else if (error.message == "Firebase: The email address is badly formatted. (auth/invalid-email)."){
             Alert.alert('','E-post adressen du har skrevet inn er ikke gyldig!',)
 
         //BRUKER EKSISTERER IKKE
@@ -53,5 +54,6 @@ const handleLogin = async ( email, password, navigation, signup) => {
         }
     }
  };
+
 
  export { handleLogin }

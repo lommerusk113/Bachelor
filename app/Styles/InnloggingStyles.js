@@ -50,7 +50,7 @@ const InnloggingStyles = StyleSheet.create({
 
     // CONTAINER TIL KNAPPER
     buttonContainer: {
-        width: '60%',
+        width: '80%',
         minWidth: 235,
         justifyContent: 'center',
         alignItems: 'center',
